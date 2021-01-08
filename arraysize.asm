@@ -3,6 +3,7 @@
 
  .DATA
     PROMPT_1  DB  'Enter Array size :',0DH,0AH,'$'
+    PROMPT_2  DB  'The Array elements are : $'
 
 
     ARRAY_Size   DW  1 DUP(0)                      ;defines the array size as an array of one element
