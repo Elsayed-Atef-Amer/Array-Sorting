@@ -20,7 +20,7 @@
 
      LEA SI, ARRAY_Size                ; set SI=offset address of ARRAY
 
-     CALL READ_Size              ; call the procedure READ_ARRAY
+     CALL READ_Size              ; call the procedure READ_Size
 
 ;-----------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------
