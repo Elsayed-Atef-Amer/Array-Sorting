@@ -7,11 +7,12 @@ Our Names Are:
   5. Shereen Gamal.
 
 Introduction:
+
   Our project about array sorting using two techniques (Bubble sort , Quick sort).
   with UI which PROMPT the user 
-    - first to enter the size of array.
-    - next ask to enter the array element by element.
-    - then ask to make choice between two techniques.
+    1- first to enter the size of array.
+    2- next ask to enter the array element by element.
+    3- then ask to make choice between two techniques.
     
 Content of data segment:
   1. Array with length of 100.
