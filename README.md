@@ -8,11 +8,11 @@ Our Names Are:
 
 Introduction:
 
-  Our project about array sorting using two techniques (Bubble sort , Quick sort).
-  with UI which PROMPT the user 
-    1- first to enter the size of array.
-    2- next ask to enter the array element by element.
-    3- then ask to make choice between two techniques.
+  Our project is array sorting using two techniques (Bubble sort , Quick sort).
+    with UI which PROMPT the user 
+      1- first to enter the size of array.
+      2- next ask to enter the array element by element.
+      3- then ask to make choice between two techniques.
     
 Content of data segment:
   1. Array with length of 100.
@@ -27,7 +27,7 @@ Steps of  coding :
   7. //Quick sort code.
   
 C code :
-  /// we wold enter our c code here ///
+  /// we would enter our c code here ///
   
   
   
