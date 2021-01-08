@@ -4,6 +4,7 @@
  .DATA
     PROMPT_1  DB  'Enter Array size :',0DH,0AH,'$'
     PROMPT_2  Dw  'The Array elements are : $'
+    ARRAY DW 100 DUP(?)
 
 ARRAY DW 10 DUP(?)
     ARRAY_Size   DW  1 DUP(0)                      ;defines the array size as an array of one element
@@ -19,7 +20,7 @@ ARRAY DW 10 DUP(?)
      MOV AH, 9                    ;AH value for dos interrupt output a message
      INT 21H
 
-     LEA SI, ARRAY_Size                ; set SI=offset address of ARRAY
+     LEA SI, ARRAY                ; set SI=offset address of ARRAY
 
      CALL READ_Size              ; call the procedure READ_Size
      
@@ -27,6 +28,10 @@ ARRAY DW 10 DUP(?)
      AND AX, 0FH 
      
      MOV BX,AX                  ; to get the value of only AL as the size of array
+   
+     LEA DX, PROMPT_2             ; load and display the string PROMPT_2
+     MOV AH, 9                    
+     INT 21H
      
      CALL READ_ARRAY             ; call the procedure READ_ARRAY
 
