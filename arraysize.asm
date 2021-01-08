@@ -22,10 +22,17 @@
 
      LEA SI, ARRAY                ; set SI=offset address of ARRAY
 
-     CALL READ_Size              ; call the procedure READ_Size
+     CALL INDECIMAL              ; call the procedure INDECIMAL Which reads the size of the array and stores it in AL
+     
+
+;---------------------------------------------------------------------------------------------------
+;----------------------------------------------------------------------------------------------------
+;the array size element is stored in AL register at this point which is 8bit in size, for further edits 
+
+
      
      
-     AND AX, 0FH 
+     AND AX, 00FFH            ; to put zeros in AH and to be able to put the counter BX = AX ( BX= 0000 AL )
      
      MOV BX,AX                  ; to get the value of only AL as the size of array
    
@@ -36,17 +43,6 @@
      CALL READ_ARRAY             ; call the procedure READ_ARRAY
 
 
-;-----------------------------------------------------------
-;-----------------------------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------------------------
-;---------------------------------------------------------------------------------------------------
-;----------------------------------------------------------------------------------------------------
-;the array size element is stored in AL register at this point which is 8bit in size, for further edits 
-;
-;
-;
-;
-;
 
 
      MOV AH, 4CH                  ;AH Value for dos interrupt exit program
@@ -54,31 +50,6 @@
    MAIN ENDP
 
 ;-------------------------------------------------------------------------
- READ_Size PROC
-   ; this procedure will read the size of an array
-   ; input : SI=offset address of the array
-   ;       : BX=size of the array
-   ; output : none
-
-   PUSH AX                        ; push AX onto the STACK
-   PUSH CX                        ; push CX onto the STACK
-   PUSH DX                        ; push DX onto the STACK
-
-     CALL INDECIMAL                   ; call the procedure INDECIMAL
-
-     MOV [SI], AX                 ; set [SI]=AX
-
-
-     MOV DL, 0AH                  ; line feed
-     MOV AH, 1                    ; set input function and stored input in AL
-     INT 21H                      ; print a character
-
-   POP DX                         ; pop a value from STACK into DX
-   POP CX                         ; pop a value from STACK into CX
-   POP AX                         ; pop a value from STACK into AX
-
-   RET                            ; return control to the calling procedure
- READ_Size ENDP
 
 ;------------------------------------------------------------------------
  INDECIMAL PROC
