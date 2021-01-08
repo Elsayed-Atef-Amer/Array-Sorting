@@ -21,6 +21,14 @@
      LEA SI, ARRAY_Size                ; set SI=offset address of ARRAY
 
      CALL READ_Size              ; call the procedure READ_Size
+     
+     
+     AND AX, 0FH 
+     
+     MOV BX,AX                  ; to get the value of only AL as the size of array
+     
+     CALL READ_ARRAY             ; call the procedure READ_ARRAY
+
 
 ;-----------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------
@@ -232,6 +240,41 @@
 
    RET                            ; return control to the calling procedure
  INDECIMAL ENDP
+ 
+ ;**************************************************************************;
+ ;-----------------------------  READ_ARRAY  -------------------------------;
+ ;**************************************************************************;
+ 
+ READ_ARRAY PROC
+   ; this procedure will read the elements for an array
+   ; input : SI=offset address of the array
+   ;       : BX=size of the array
+   ; output : none
+
+   PUSH AX                        ; push AX onto the STACK
+   PUSH CX                        ; push CX onto the STACK
+   PUSH DX                        ; push DX onto the STACK
+
+   
+   MOV CX, BX                     ; set CX=BX
+
+   @READ_ARRAY:                   ; loop label
+     CALL INDECIMAL                   ; call the procedure INDECIMAL
+
+     MOV [SI], AX                 ; set [SI]=AX
+     ADD SI, 2                    ; set SI=SI+2
+
+     MOV DL, 0AH                  ; line feed
+     MOV AH, 2                    ; set output function
+     INT 21H                      ; print a character
+   LOOP @READ_ARRAY               ; jump to label @READ_ARRAY while CX!=0
+
+   POP DX                         ; pop a value from STACK into DX
+   POP CX                         ; pop a value from STACK into CX
+   POP AX                         ; pop a value from STACK into AX
+
+   RET                            ; return control to the calling procedure
+   READ_ARRAY ENDP
 
 
 
