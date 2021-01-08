@@ -1,4 +1,3 @@
-;Code for Program that prompts the user to enter an array of size 10 and display it in Assembly Language
  .MODEL SMALL
  .STACK 100H
 
