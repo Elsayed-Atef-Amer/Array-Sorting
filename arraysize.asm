@@ -6,7 +6,7 @@
     PROMPT_2  Dw  'The Array elements are : $'
     ARRAY DW 100 DUP(?)
 
-ARRAY DW 10 DUP(?)
+
     ARRAY_Size   DW  1 DUP(0)                      ;defines the array size as an array of one element
 
  .CODE
