@@ -1,7 +1,7 @@
          .MODEL SMALL
  .STACK 100H
 .DATA
-    PROMPT_3  DB  'Enter Array type for sort 1 OR 2 :',0DH,0AH,'$'
+    PROMPT_3  DB  'please,choice Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :',0DH,0AH,'$'
         TYPE   DW  1 DUP(0)                      ;defines the array size as an array of one element
 .CODE
 .startup
