@@ -35,7 +35,7 @@
      INT 21H
      
      CALL READ_ARRAY             ; call the procedure READ_ARRAY
-
+    CALL BUBBLE_SORT
 
 ;-----------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------
@@ -451,6 +451,26 @@
     MOV CX,SI                       ;store last value of SI register into CX register
     
     SUB CX,BX                       ;get adress of first element of array CX = si-2(bx-1) //last adress in our loop
+     oloop:
+        mov dx, ds
+        lea si, ARRAY     
+         
+
+        iloop:  
+        cmp si,CX
+        je   oloop
+            mov AX, [si]                 ; Because compare can't have both memory
+            cmp AX, [si-2]
+            jl common                      ; if al is less than [si+1] Skip the below two lines for swapping.
+            xchg AX, [si-2]
+            mov [si], AX                    ; Coz we can't use two memory locations in xchg directly.
+
+            common:
+                sub si,2
+                loop iloop
+
+        dec dx
+        jnz oloop
     
    
    BUBBLE_SORT ENDP
