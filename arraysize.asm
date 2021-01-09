@@ -23,7 +23,7 @@
 
      LEA SI, ARRAY                ; set SI=offset address of ARRAY
 
-     CALL Array_Size_Procedure              ; call the procedure READ_Size
+     CALL Array_SizeP              ; call the procedure READ_Size
      
      
      AND AX, 00FFH 
@@ -265,7 +265,7 @@
    
    
    
-    Array_Size_Procedure PROC
+    Array_SizeP PROC
         ; this procedure will read the array size from the user as a positive number between 0 and 255
     
    PUSH BX                        ; push BX onto the STACK
@@ -288,17 +288,15 @@
    INT 21H                        ; read a character
 
    CMP AL, "-"                    ; compare AL with "-"
-   JE @MINUS1                      ; jump to label @MINUS if AL="-"
+   INC CL
+   JE @error1                      ; jump to label @MINUS if AL="-"
 
    CMP AL, "+"                    ; compare AL with "+"
    JE @PLUS1                       ; jump to label @PLUS if AL="+"
 
    JMP @SKIP_INPUT1                ; jump to label @SKIP_INPUT
 
-   @MINUS1:                        ; jump label
-   MOV CH, 1                      ; set CH=1
-   INC CL                         ; set CL=CL+1
-   JMP @error1                     ; jump to label @Error1
+
    
    @PLUS1:                         ; jump label
    MOV CH, 2                      ; set CH=2
@@ -317,27 +315,23 @@
      JNE @NOT_BACKSPACE1           ; jump to label @NOT_BACKSPACE if AL!=8
 
      CMP CH, 0                    ; compare CH with 0
-     JNE @CHECK_REMOVE_MINUS1      ; jump to label @CHECK_REMOVE_MINUS if CH!=0
+     JNE @CHECK_REMOVE_PLUS1      ; jump to label @CHECK_REMOVE_MINUS if CH!=0
 
      CMP CL, 0                    ; compare CL with 0
      JE @SKIP_BACKSPACE1           ; jump to label @SKIP_BACKSPACE if CL=0
      JMP @MOVE_BACK1               ; jump to label @MOVE_BACK
 
-     @CHECK_REMOVE_MINUS1:         ; jump label
-
-     CMP CH, 1                    ; compare CH with 1
-     JNE @CHECK_REMOVE_PLUS1       ; jump to label @CHECK_REMOVE_PLUS if CH!=1
 
      CMP CL, 1                    ; compare CL with 1
-     JE @REMOVE_PLUS_MINUS1        ; jump to label @REMOVE_PLUS_MINUS if CL=1
+     JE @REMOVE_PLUS1        ; jump to label @REMOVE_PLUS_MINUS if CL=1
 
      @CHECK_REMOVE_PLUS1:          ; jump label
 
      CMP CL, 1                    ; compare CL with 1
-     JE @REMOVE_PLUS_MINUS1        ; jump to label @REMOVE_PLUS_MINUS if CL=1
+     JE @REMOVE_PLUS1        ; jump to label @REMOVE_PLUS_MINUS if CL=1
      JMP @MOVE_BACK1               ; jump to label @MOVE_BACK
 
-     @REMOVE_PLUS_MINUS1:          ; jump label
+     @REMOVE_PLUS1:          ; jump label
        MOV AH, 2                  ; set output function
        MOV DL, 20H                ; set DL=' '
        INT 21H                    ; print a character
@@ -427,6 +421,6 @@
    POP BX                         ; pop a value from STACK into BX
 
    RET                            ; return control to the calling procedure 
-   Array_Size_Procedure ENDP
+   Array_SizeP ENDP
 
  END MAIN
