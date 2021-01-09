@@ -28,6 +28,7 @@
   
 **Bubble Sort Algorithm**
 
+
   -It is a simple algorithm which is used to sort a given set of n elements provided in form of an array with n number of elements. Bubble Sort compares all the element one by   one and sort them based on their values.
   
   -If the given array has to be sorted in ascending order, then bubble sort will start by comparing the first element of the array with the second element, if the first element
@@ -44,6 +45,8 @@
   ![](Images/Bubble-sort-example.gif)
 
 **QuickSort Algorithm**
+
+
 Like Merge Sort, QuickSort is a Divide and Conquer algorithm. It picks an element as pivot and partitions the given array around the picked pivot. There are many different versions of quickSort that pick pivot in different ways.
 1-  Always pick first element as pivot.
 2-Always pick last element as pivot (implemented below)
