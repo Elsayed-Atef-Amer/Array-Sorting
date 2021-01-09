@@ -2,9 +2,9 @@
  .STACK 100H
 
  .DATA
-    PROMPT_1  DB  'Enter Array size :',0DH,0AH,'$'
-    PROMPT_2  Dw  'The Array elements are : $'  
-    PROMPT_3  DW  'array size cant be negative, please enter a + number'
+    PROMPT_1  DW  'Enter Array size :',0DH,0AH,'$'
+    PROMPT_2  DW  'The Array elements are : $'  
+    PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number $'
     ARRAY DW 100 DUP(?)
 
 
@@ -289,7 +289,7 @@
 
    CMP AL, "-"                    ; compare AL with "-"
    INC CL
-   JE @error1                      ; jump to label @MINUS if AL="-"
+   JE @ERROR2                     ; jump to label @ERROR2 if AL="-"
 
    CMP AL, "+"                    ; compare AL with "+"
    JE @PLUS1                       ; jump to label @PLUS if AL="+"
@@ -390,9 +390,15 @@
    MOV AH, 2                      ; set output function
    MOV DL, 7H                     ; set DL=7H
    INT 21H                        ; print a character
-
    XOR CH, CH                     ; clear CH
 
+    @ERROR2:                        ; jump label
+
+   LEA DX, PROMPT_3 
+   MOV AH, 9
+   INT 21H
+   RET
+   
    @CLEAR1:                        ; jump label
      MOV DL, 8H                   ; set DL=8H   (backspace in ascii)
      INT 21H                      ; print a character
