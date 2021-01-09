@@ -194,13 +194,13 @@
    XOR CH, CH                     ; clear CH
 
    @CLEAR:                        ; jump label
-     MOV DL, 8H                   ; set DL=8H
+     MOV DL, 8H                   ; set DL=8H (backspace in ascii)
      INT 21H                      ; print a character
 
-     MOV DL, 20H                  ; set DL=' '
+     MOV DL, 20H                  ; set DL=' '    (Space in ascii)
      INT 21H                      ; print a character
 
-     MOV DL, 8H                   ; set DL=8H
+     MOV DL, 8H                   ; set DL=8H          (backspace in ascii)
      INT 21H                      ; print a character
    LOOP @CLEAR                    ; jump to label @CLEAR if CX!=0
 
