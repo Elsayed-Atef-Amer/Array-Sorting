@@ -428,5 +428,34 @@
 
    RET                            ; return control to the calling procedure 
    Array_SizeP ENDP
+  
+   ;------------------------------------------------------------------------------
+   ;------------------------------BUBBLE_SORT------------------------------------------------
+   ;---------------------------------------------------------------------------------
+   ;---------------------------------------------------------------------------------
+   
+    BUBBLE_SORT PROC  
+   
+
+    MOV DS,BX
+    
+    MOV DX,DS 
+    
+    XOR AX,AX 
+    
+    XOR CX,CX 
+    SUB BX,1                        ;DECREMENT lengt by 1
+    
+    ADD BX,BX                       ;multiply length-1 by 2
+    
+    MOV CX,SI                       ;store last value of SI register into CX register
+    
+    SUB CX,BX                       ;get adress of first element of array CX = si-2(bx-1) //last adress in our loop
+    
+   
+   BUBBLE_SORT ENDP
+
+ END MAIN
+ 
 
  END MAIN
