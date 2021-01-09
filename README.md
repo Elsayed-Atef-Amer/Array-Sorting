@@ -23,12 +23,12 @@
   2. Two variables one for array size and the other for making choice.
     
 **Steps of  coding :**
-  1. Taking the first input 'ARRAY_size' from the user using 'READ_Size' function in our code.
+  1. Taking the first input 'ARRAY_size' from the user.
   2. Making a function to convert the input from ASKI to its decimal value, that is called 'INDECIMAL', we will call this function for every input we would take from user.
   3. Taking the second input 'ARRAY' element by element from the user using 'READ_ARRAY' function in our code.
-  4. //Condition code.
-  6. //Bubble sort code.
-  7. //Quick sort code.
+  4. Condition code.
+  6. Bubble sort code.
+  7. Quick sort code.
   
 **Bubble Sort Algorithm**
 
@@ -71,7 +71,34 @@ The key process in quickSort is partition(). Target of partitions is, given an a
 
   
 **C code :**
-  /// we would enter our c code here ///
+
+     /// c code:
+  
+  
+    function BUBBLE_SORT (ARR){
+      //here BUBBLE_SORT code 
+      };
+    
+    function QUICK_SORT (ARR){
+      //here QUICK_SORT code 
+      };
+    
+    main(){
+  
+      //define variables and take inputs from user code 
+    
+      //condition code
+      if(choice == 1){
+       BUBBLE_SORT(ARRAY);
+      }
+      else if (choice == 2){
+        QUICK_SORT(ARRAY);
+      }
+      else{
+        printf('Error invaild input');
+      }  
+    }
+  
   
   
   
