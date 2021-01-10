@@ -5,9 +5,9 @@
     PROMPT_1  DW  'Enter Array size :',0DH,0AH,'$'
     PROMPT_2  DW  'The Array elements are : $'  
     PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number $'
+    PROMPT_4  DB  'please,choice Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :',0DH,0AH,'$'  
+    
     ARRAY DW 100 DUP(?)
-
-
     ARRAY_Size   DW  1 DUP(0)                      ;defines the array size as an array of one element
 
  .CODE
@@ -35,7 +35,15 @@
      INT 21H
      
      CALL READ_ARRAY             ; call the procedure READ_ARRAY
-    CALL BUBBLE_SORT
+     
+     LEA DX, PROMPT_4            ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
+     MOV AH, 9                    ;AH value for dos interrupt output a message
+     INT 21H
+     
+     CALL CONDITION
+     
+  
+     ;CALL BUBBLE_SORT
 
 ;-----------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------
@@ -54,6 +62,160 @@
      INT 21H
    MAIN ENDP
 
+
+
+;-------------------------------------------------------------------------
+;-------------------CONDITION PROC===-------------------------------------
+;------------------------------------------------------------------------ 
+ CONDITION PROC 
+   
+    @READ0: 
+        xor cx,cx
+        xor bx,bx 
+        xor ax,ax
+
+        Mov AH,1                        ;read a character
+        INT 21h                         ;interrupt dos
+     
+        cmp    al, '-'                  ;compare input with -
+        JE @NEGATIVE0    
+        cmp al,'+'                      ;compare input with +
+        jE    @POSITIVE0        
+              
+              
+    @CHECK_BUBBLE0:  
+
+         cmp AL,31h
+         je @BUBBLE_SORT0
+         jne @CHECK_QUICK0 
+        
+ 
+ 
+    @CHECK_QUICK0:
+        cmp AL,32h
+        je @QUICK_SORT0 
+
+        MOV CX,1
+        Jne @ERROR0
+
+    @BUBBLE_SORT0:
+       
+        mov ah,4ch
+        int 21h
+    
+
+
+    @QUICK_SORT0:
+        mov ah,4ch
+        int 21h   
+   
+   
+    @NEGATIVE0:
+        INC CL
+        JMP @ERROR0
+   
+   
+    @POSITIVE0:
+        INC CL
+        JMP @ERROR0   
+   
+   
+              
+    @INPUT0:                        ; jump label
+        MOV AH, 1                    ; set input function
+        INT 21H                      ; read a character
+
+    @SKIP_INPUT0:                 ; jump label
+
+        CMP AL, 0DH                  ; compare AL with Return (enter)
+        JE @END_INPUT0                ; jump to label @END_INPUT
+
+        CMP AL, 8H                   ; compare AL with 8H   (backspace)
+        JNE @NOT_BACKSPACE0           ; jump to label @NOT_BACKSPACE if AL!=8
+ 
+                       
+   
+    @MOVE_BACK0:                  ; jump label
+
+        MOV AX, BX                   ; set AX=BX
+        MOV BX, 10                   ; set BX=10
+        DIV BX                       ; set AX=AX/BX
+
+        MOV BX, AX                   ; set BX=AX
+
+        MOV AH, 2                    ; set output function
+        MOV DL, 20H                  ; set DL=' '
+        INT 21H                      ; print a character
+
+        MOV DL, 8H                   ; set DL=8H
+        INT 21H                      ; print a character
+
+        XOR DX, DX                   ; clear DX
+        DEC CL                       ; set CL=CL-1
+
+        JMP @INPUT0                   ; jump to label @INPUT
+
+    @NOT_BACKSPACE0:              ; jump label
+
+        INC CL                       ; set CL=CL+1
+
+        CMP AL, 30H                  ; compare AL with 0
+        JL @ERROR0                    ; jump to label @ERROR if AL<0
+
+        CMP AL, 39H                  ; compare AL with 9
+        JG @ERROR0                   ; jump to label @ERROR if AL>9
+
+        AND AX, 000FH                ; convert ascii to decimal code
+
+        PUSH AX                      ; push AX onto the STACK
+
+        MOV AX, 10                   ; set AX=10
+        MUL BX                       ; set AX=AX*BX
+        MOV BX, AX                   ; set BX=AX
+
+        POP AX                       ; pop a value from STACK into AX
+
+        ADD BX, AX                   ; set BX=AX+BX
+        JS @ERROR0                    ; jump to label @ERROR if SF=1
+        JMP @INPUT0                     ; jump to label @INPUT
+     
+                         
+    @ERROR0:                        ; jump label
+
+        MOV AH, 2                      ; set output function
+        MOV DL, 7H                     ; set DL=7H
+        INT 21H                        ; print a character
+      
+      
+    @CLEAR0:                        ; jump label
+        MOV DL, 8H                   ; set DL=8H (backspace in ascii)
+        INT 21H                      ; print a character
+
+        MOV DL, 20H                  ; set DL=' '    (Space in ascii)
+        INT 21H                      ; print a character
+
+        MOV DL, 8H                   ; set DL=8H          (backspace in ascii)
+        INT 21H                      ; print a character
+        LOOP @CLEAR0                    ; jump to label @CLEAR if CX!=0
+
+        JMP @READ0                      ; jump to label @READ
+       
+     @END_INPUT0:                    ; jump label
+
+        CMP CH, 1                      ; compare CH with 1   
+        JNE @EXIT0                      ; jump to label @EXIT if CH!=1
+        NEG BX                         ; negate BX
+    
+    @EXIT0:                         ; jump label
+
+        MOV AX, BX                     ; set AX=BX
+
+        POP DX                         ; pop a value from STACK into DX
+        POP CX                         ; pop a value from STACK into CX
+        POP BX                         ; pop a value from STACK into BX
+
+
+  CONDITION ENDP
 ;-------------------------------------------------------------------------
 
 ;------------------------------------------------------------------------
