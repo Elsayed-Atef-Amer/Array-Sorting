@@ -37,9 +37,7 @@
       Average case
   Hence, the result of these cases is often a formula giving the average time required for a particular sort of size 'n.' Most of the sort methods have time requirements that
   range from O(nlog n) to O(n2).
-  
- ![](https://miro.medium.com/max/2048/1*bKZUD0XAHlIVXoZ171Jxwg.jpeg)
- 
+ ![](https://i.stack.imgur.com/GylD4.jpg)
 **Project:**
 
   Our project is array sorting using two techniques (Bubble sort , Quick sort).
