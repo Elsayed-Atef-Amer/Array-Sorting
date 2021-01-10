@@ -6,6 +6,7 @@
     PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number ',0AH,0DH,'$'
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Quick:',0AH,0DH,'$'
+    PROMPT_6  DW  ,0AH,0DH,'your sorted aray is:$'
     ARRAY DW 255 DUP(?)
     
     
@@ -20,47 +21,88 @@
      MOV AH, 9                    ;AH value for dos interrupt output a message
      INT 21H
      LEA SI, ARRAY                ; set SI=offset address of ARRAY
-     CALL Array_SizeP              ; call the procedure READ_Size
-     AND AX, 00FFH   
+     CALL Array_SizeP             ; call the procedure READ_Size
+     
+     
+     AND AX, 00FFH 
+     
      MOV BX,AX                  ; to get the value of only AL as the size of array
+   
      LEA DX, PROMPT_2             ; load and display the string PROMPT_2
      MOV AH, 9                    
      INT 21H
-     CALL READ_ARRAY             ; call the procedure READ_ARRAY 
+     
+     CALL READ_ARRAY             ; call the procedure READ_ARRAY
+     
      LEA DX, PROMPT_4            ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
      MOV AH, 9                    ;AH value for dos interrupt output a message
      INT 21H
-     CALL CONDITION               ;call the procedure CONDITION
-     ;CALL BUBBLE_SORT             ;call the procedure BUBBLE_SORT
+     LEA SI,ARRAY
+     
+     CALL CONDITION
+                    
+                    
+
+     
+  
+     ;CALL BUBBLE_SORT
+;-----------------------------------------------------------
+;-----------------------------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+;----------------------------------------------------------------------------------------------------
 ;the array size element is stored in AL register at this point which is 8bit in size, for further edits 
+;
+;
+;
+;
+;
      MOV AH, 4CH                  ;AH Value for dos interrupt exit program
-     INT 21H                      ; return control to DOS
+     INT 21H
    MAIN ENDP
+;-------------------------------------------------------------------------
 ;-------------------CONDITION PROC===-------------------------------------
- CONDITION PROC  
+;------------------------------------------------------------------------ 
+ CONDITION PROC 
+    
    @READ0:
-   push cx    ; push cx onto the STACK
-   push ax    ; push ax onto the STACK
-   push dx   ; push dx onto the STACK
+   push cx
+
+   push ax 
+   push dx 
       push bx
-xor cx,cx     ;SET cx=0
-xor bx,bx     ;SET bx=0
-xor ax,ax     ;SET ax=0
+xor cx,cx
+xor bx,bx 
+xor ax,ax
+
 Mov AH,1                        ;read a character
-INT 21h                         ;interrupt dos that takes input from user    
+INT 21h                         ;interrupt dos that takes input from user
+     
 cmp    al, '-'                  ;compare input with -
-JE @NEGATIVE                     ;IF EQUAL JUMP TO LABEL NEGATIVE
+JE @NEGATIVE    
 cmp al,'+'                      ;compare input with +
-jE    @POSITIVE        ;if equal zero jump to @positive
-jmp @input0              ;if not jump to @input to set another input  
+jE    @POSITIVE        
+jmp @input0              
+              
+
+
+
+   
+   
 @NEGATIVE:
-INC CL                   ;INCREMENT BY 1 CL=CL+1
-JMP @ERROR0   
+INC CL
+JMP @ERROR0
+   
+   
 @POSITIVE:
-INC CL                ;INCREMENT BY 1 CL=CL+1
-JMP @ERROR0                 
+INC CL
+JMP @ERROR0   
+   
+   
+              
 @INPUT0:
 mov bl,al
+                        ; jump label
      MOV AH, 1                    ; set input function
      INT 21H                      ; read a character
 
@@ -70,45 +112,88 @@ mov bl,al
      JE @END_INPUT0                ; jump to label @END_INPUT
 
      CMP AL, 8H                   ; compare AL with 8H   (backspace)
-     JNE @NOT_BACKSPACE0           ; jump to label @NOT_BACKSPACE if AL!=8                        
+     JNE @NOT_BACKSPACE0           ; jump to label @NOT_BACKSPACE if AL!=8
+ 
+ 
+
+
+
+
+
+                         
    
 @MOVE_BACK0:                  ; jump label
+
+
      MOV AH, 2                    ; set output function
      MOV DL, 20H                  ; set DL=' '
      INT 21H                      ; print a character
-    MOV DL, 8H                   ; set DL=8H
+
+     MOV DL, 8H                   ; set DL=8H
      INT 21H                      ; print a character
+
      XOR DX, DX                   ; clear DX
      DEC CL                       ; set CL=CL-1
-     JMP @INPUT0                   ; jump to label @INPUT    
+
+     JMP @INPUT0                   ; jump to label @INPUT
+
+
+
+
+
+
+        
+        
+        
 @NOT_BACKSPACE0:              ; jump label
+
      INC CL                       ; set CL=CL+1
+
      CMP AL, 30H                  ; compare AL with 0
      JL @ERROR0                    ; jump to label @ERROR if AL<0
+
      CMP AL, 39H                  ; compare AL with 9
      JG @ERROR0                    ; jump to label @ERROR if AL>9
+
      AND AX, 000FH                ; convert ascii to decimal code
+
      PUSH AX                      ; push AX onto the STACK
+
      MOV AX, 10                   ; set AX=10
      MUL BX                       ; set AX=AX*BX
      MOV BX, AX                   ; set BX=AX
+
      POP AX                       ; pop a value from STACK into AX
+
      ADD BX, AX                   ; set BX=AX+BX
      JS @ERROR0                    ; jump to label @ERROR if SF=1
-   JMP @INPUT0                     ; jump to label @INPUT                             
+   JMP @INPUT0                     ; jump to label @INPUT
+        
+        
+        
+        
+        
+                         
 @ERROR0:                        ; jump label
+
    MOV AH, 2                      ; set output function
    MOV DL, 7H                     ; set DL=7H
    INT 21H                        ; print a character
+      
+      
       @CLEAR0:                        ; jump label
      MOV DL, 8H                   ; set DL=8H (backspace in ascii)
      INT 21H                      ; print a character
+
      MOV DL, 20H                  ; set DL=' '    (Space in ascii)
      INT 21H                      ; print a character
+
      MOV DL, 8H                   ; set DL=8H          (backspace in ascii)
      INT 21H                      ; print a character
    LOOP @CLEAR0                    ; jump to label @CLEAR if CX!=0
-   JMP @READ0                      ; jump to label @READ    
+
+   JMP @READ0                      ; jump to label @READ
+       
  @END_INPUT0:                    ; jump label
            
            @CHECK_BUBBLE:  
@@ -134,38 +219,87 @@ mov bl,al
 
 @BUBBLE_SORT:
   
-pop bx               ; pop a value from STACK into BX
-xor ax,ax            ;SET ax=0
+pop bx  
 
-        MOV CX, BX                       ; set CX=BX  
-        dec CX                           ;DECREMENT CX BY 1 CX=CX-1
-            MOV DS,CX
-            OLOOP:
-                MOV DX, DS
-                LEA SI,ARRAY       ;set SI=offset address of ARRAY
-            ILOOP:
-                MOV AL, [si]                 ; Because compare can't have both memory
-                CMP AL, [si+2]
-                JL COMMON                      ; if al is less than [si+2] Skip the below two lines for swapping.
-                XCHG AL, [SI+2]
-                MOV [SI], AL                    ; Coz we can't use two memory locations in xchg directly.
-                COMMON:
-                ADD SI,2                           ; INCREAMENT BY TWO
-                DEC DX                    ;DECREMENT BY ONE DX=DX-1
-                JNZ ILOOP   
-            Loop OLOOP
-            MOV AH, 2                    ; set output function
-            MOV DL, 20H                  ; set DL=20H
-            INT 21H                      ; print a character
-            ADD SI, 2                    ; set SI=SI+2
+
+
+
+   PUSH AX                        ; push AX onto the STACK  
+                      ; push BX onto the STACK
+   PUSH CX                        ; push CX onto the STACK
+   PUSH DX                        ; push DX onto the STACK
+   PUSH DI                        ; push DI onto the STACK
+
+   MOV AX, SI                     ; set AX=SI
+   MOV CX, BX                     ; set CX=BX
+   DEC CX 
+   push bx                        ; set CX=CX-1
+
+   @OUTER_LOOP:                   ; loop label
+     MOV BX, CX                   ; set BX=CX
+
+     MOV SI, AX                   ; set SI=AX
+     MOV DI, AX                   ; set DI=AX
+     INC DI
+     INC DI                       ; set DI=DI+2
+
+     @INNER_LOOP:                 ; loop label 
+       MOV DL, [SI]               ; set DL=[SI]
+
+       CMP DL, [DI]               ; compare DL with [DI]
+       JNG @SKIP_EXCHANGE         ; jump to label @SKIP_EXCHANGE if DL<[DI]
+
+       XCHG DL, [DI]              ; set DL=[DI], [DI]=DL
+       MOV [SI], DL               ; set [SI]=DL
+
+       @SKIP_EXCHANGE:            ; jump label
+       INC SI
+       INC SI                     ; set SI=SI+2
+       INC DI
+       INC DI                     ; set DI=DI+2
+
+       DEC BX                     ; set BX=BX-1
+     JNZ @INNER_LOOP              ; jump to label @INNER_LOOP if BX!=0
+   LOOP @OUTER_LOOP               ; jump to label @OUTER_LOOP while CX!=0
+      
+      POP BX
+   POP DI                         ; pop a value from STACK into DI
+   POP DX                         ; pop a value from STACK into DX
+   POP CX                         ; pop a value from STACK into CX
+                            ; pop a value from STACK into BX
+   POP AX                         ; pop a value from STACK into AX
+   
+   
+   
+   jmp @ENDSORT
 @QUICK_SORT:
-            mov ah,4ch    ; return control to DOS
-            int 21h         
+   
+             
+          
+          
         POP DX                         ; pop a value from STACK into DX
         POP CX                         ; pop a value from STACK into CX
         POP BX                         ; pop a value from STACK into BX   
-        pop AX
+        pop AX                                                        
+        
+        @ENDSORT: 
+                       
+                       
+     LEA DX, PROMPT_6            ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
+     MOV AH, 9                    ;AH value for dos interrupt output a message
+     INT 21H
+                       
+                       
+             LEA SI, ARRAY                ; set SI=offset address of ARRAY
+
+     CALL PRINT_ARRAY             ; call the procedure PRINT_ARRAY
+
+     MOV AH, 4CH                  ; return control to DOS
+     INT 21H
+     
+        RET
   CONDITION ENDP
+;-------------------------------------------------------------------------
 ;------------------------------------------------------------------------
  INDECIMAL PROC
    ; this procedure will read a number in decimal form    
@@ -281,7 +415,11 @@ xor ax,ax            ;SET ax=0
    POP BX                         ; pop a value from STACK into BX
    RET                            ; return control to the calling procedure
  INDECIMAL ENDP
+ 
+ ;**************************************************************************;
  ;-----------------------------  READ_ARRAY  -------------------------------;
+ ;**************************************************************************;
+ 
  READ_ARRAY PROC
    ; this procedure will read the elements for an array
    ; input : SI=offset address of the array
@@ -305,6 +443,14 @@ xor ax,ax            ;SET ax=0
    POP AX                         ; pop a value from STACK into AX
    RET                            ; return control to the calling procedure
    READ_ARRAY ENDP
+   
+   ;------------------------------------------------------------------------------
+   ;------------------------------------------------------------------------------
+   ;---------------------------------------------------------------------------------
+   ;---------------------------------------------------------------------------------
+   
+   
+   
     Array_SizeP PROC
         ; this procedure will read the array size from the user as a positive number between 0 and 255
     
@@ -357,7 +503,8 @@ xor ax,ax            ;SET ax=0
        INT 21H                    ; print a character
        MOV DL, 8H                 ; set DL=8H
        INT 21H                    ; print a character
-       JMP @READ1                  ; jump to label @READ                          
+       JMP @READ1                  ; jump to label @READ
+                                  
      @MOVE_BACK1:                  ; jump label
      MOV AX, BX                   ; set AX=BX
      MOV BX, 10                   ; set BX=10
@@ -396,6 +543,7 @@ xor ax,ax            ;SET ax=0
    MOV AH, 9
    INT 21H
    RET
+   
    @CLEAR1:                        ; jump label
      MOV DL, 8H                   ; set DL=8H   (backspace in ascii)
      INT 21H                      ; print a character
@@ -416,25 +564,24 @@ xor ax,ax            ;SET ax=0
    POP BX                         ; pop a value from STACK into BX
    RET                            ; return control to the calling procedure 
    Array_SizeP ENDP   
+   
+   
+   
+    ;**************************************************************************;
  ;--------------------------------  OUTDEC  --------------------------------;
- OUTDEC PROC
+ ;**************************************************************************;
+OUTDEC PROC
    ; this procedure will display a decimal number
    ; input : AX
    ; output : none
+
    PUSH BX                        ; push BX onto the STACK
    PUSH CX                        ; push CX onto the STACK
-   PUSH DX                        ; push DX onto the STACK 
-   CMP AX, 0                      ; compare AX with 0
-   JGE @START                     ; jump to label @START if AX>=0
-     PUSH AX                        ; push AX onto the STACK
-   MOV AH, 2                      ; set output function
-   MOV DL, "-"                    ; set DL='-'
-   INT 21H                        ; print the character
-   POP AX                         ; pop a value from STACK into AX
-   NEG AX                         ; take 2's complement of AX
-   @START:                        ; jump label
+   PUSH DX                        ; push DX onto the STACK
+
    XOR CX, CX                     ; clear CX
    MOV BX, 10                     ; set BX=10
+
    @OUTPUT:                       ; loop label
      XOR DX, DX                   ; clear DX
      DIV BX                       ; divide AX by BX
@@ -442,16 +589,57 @@ xor ax,ax            ;SET ax=0
      INC CX                       ; increment CX
      OR AX, AX                    ; take OR of Ax with AX
    JNE @OUTPUT                    ; jump to label @OUTPUT if ZF=0
+
    MOV AH, 2                      ; set output function
+
    @DISPLAY:                      ; loop label
      POP DX                       ; pop a value from STACK to DX
      OR DL, 30H                   ; convert decimal to ascii code
      INT 21H                      ; print a character
-   LOOP @DISPLAY                  ; jump to label @DISPLAY if CX!=0                                                                                          
-   POP DX                         ; pop a value from STACK into DX      
-   POP CX                         ; pop a value from STACK into CX       
+   LOOP @DISPLAY                  ; jump to label @DISPLAY if CX!=0
+
+   POP DX                         ; pop a value from STACK into DX
+   POP CX                         ; pop a value from STACK into CX
    POP BX                         ; pop a value from STACK into BX
+
    RET                            ; return control to the calling procedure
  OUTDEC ENDP
+
+   
+        
+        
+ PRINT_ARRAY PROC
+   ; this procedure will print the elements of a given array
+   ; input : SI=offset address of the array
+   ;       : BX=size of the array
+   ; output : none
+
+   PUSH AX                        ; push AX onto the STACK   
+   PUSH CX                        ; push CX onto the STACK
+   PUSH DX                        ; push DX onto the STACK
+
+   MOV CX, BX                     ; set CX=BX
+
+   @PRINT_ARRAY:                  ; loop label
+     XOR AH, AH                   ; clear AH
+     MOV AL, [SI]                 ; set AL=[SI]
+
+     CALL OUTDEC                  ; call the procedure OUTDEC
+
+     MOV AH, 2                    ; set output function
+     MOV DL, 20H                  ; set DL=20H
+     INT 21H                      ; print a character
+
+     INC SI                       ; set SI=SI+2
+     INC SI
+   LOOP @PRINT_ARRAY              ; jump to label @PRINT_ARRAY while CX!=0
+
+   POP DX                         ; pop a value from STACK into DX
+   POP CX                         ; pop a value from STACK into CX
+   POP AX                         ; pop a value from STACK into AX
+
+   RET                            ; return control to the calling procedure
+ PRINT_ARRAY ENDP
+
  END MAIN
- END MAIN
+ 
