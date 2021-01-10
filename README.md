@@ -73,12 +73,26 @@ The key process in quickSort is partition(). Target of partitions is, given an a
 **C code :**
 
      /// c code:
+     
+     //Swap function
+    void swap(int *xp, int *yp) 
+    { 
+    int temp = *xp; 
+    *xp = *yp; 
+    *yp = temp; 
+    }
+       //here BUBBLE_SORT function code 
+    void BUBBLE_SORT(int arr[], int n)  
+    {  
+    for (int i = 0; i < n-1; i++)      
+      
+    // Last i elements are already in place  
+    for (int j = 0; j < n-i-1; j++)  
+        if (arr[j] > arr[j+1])  
+            swap(&arr[j], &arr[j+1]);  
+    }  
   
   
-    function BUBBLE_SORT (ARR){
-      //here BUBBLE_SORT code 
-      };
-    
     function QUICK_SORT (ARR){
       //here QUICK_SORT code 
       };
