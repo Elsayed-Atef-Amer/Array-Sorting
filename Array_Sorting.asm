@@ -6,7 +6,7 @@
     PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number ',0AH,0DH,'$'
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Quick:',0AH,0DH,'$'
-    PROMPT_6  DW  ,0AH,0DH,'your sorted array is:$'
+    PROMPT_6  DW  ,0AH,0DH,'your sorted aray is:$'
     ARRAY DW 255 DUP(?)
     
     
@@ -231,8 +231,17 @@ pop bx
    PUSH DI                        ; push DI onto the STACK
 
    MOV AX, SI                     ; set AX=SI
-   MOV CX, BX                     ; set CX=BX
+
+   
+   MOV CX, BX  
+   
+   cmp cx,1
+   jle  @Skip_Dec
+   
+                      ; set CX=BX
    DEC CX 
+   
+   @Skip_dec:
    push bx                        ; set CX=CX-1
 
    @OUTER_LOOP:                   ; loop label
@@ -244,13 +253,13 @@ pop bx
      INC DI                       ; set DI=DI+2
 
      @INNER_LOOP:                 ; loop label 
-       MOV DL, [SI]               ; set DL=[SI]
+       MOV DX, [SI]               ; set DL=[SI]
 
-       CMP DL, [DI]               ; compare DL with [DI]
+       CMP DX, [DI]               ; compare DL with [DI]
        JNG @SKIP_EXCHANGE         ; jump to label @SKIP_EXCHANGE if DL<[DI]
 
-       XCHG DL, [DI]              ; set DL=[DI], [DI]=DL
-       MOV [SI], DL               ; set [SI]=DL
+       XCHG DX, [DI]              ; set DL=[DI], [DI]=DL
+       MOV [SI], DX               ; set [SI]=DL
 
        @SKIP_EXCHANGE:            ; jump label
        INC SI
@@ -272,6 +281,10 @@ pop bx
    
    
    jmp @ENDSORT
+
+
+
+
 @QUICK_SORT:
    
              
