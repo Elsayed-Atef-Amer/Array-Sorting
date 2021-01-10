@@ -82,7 +82,7 @@ The key process in quickSort is partition(). Target of partitions is, given an a
     *yp = temp; 
     }
     
-       //here BUBBLE_SORT function code 
+       // BUBBLE_SORT Function code 
        
     void BUBBLE_SORT(int arr[], int n)  
     {  
@@ -93,7 +93,7 @@ The key process in quickSort is partition(). Target of partitions is, given an a
             swap(&arr[j], &arr[j+1]);  
     }  
   
-      //here QUICK_SORT code
+      // QUICK_SORT Function code
       
     /* This function takes last element as pivot, places 
     the pivot element at its correct position in sorted 
