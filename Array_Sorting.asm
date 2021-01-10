@@ -579,6 +579,21 @@ OUTDEC PROC
    PUSH CX                        ; push CX onto the STACK
    PUSH DX                        ; push DX onto the STACK
 
+   CMP AX, 0                      ; compare AX with 0
+   JGE @START                     ; jump to label @START if AX>=0
+
+   PUSH AX                        ; push AX onto the STACK
+
+   MOV AH, 2                      ; set output function
+   MOV DL, "-"                    ; set DL='-'
+   INT 21H                        ; print the character
+
+   POP AX                         ; pop a value from STACK into AX
+
+   NEG AX                         ; take 2's complement of AX
+
+   @START:                        ; jump label
+
    XOR CX, CX                     ; clear CX
    MOV BX, 10                     ; set BX=10
 
@@ -604,6 +619,7 @@ OUTDEC PROC
 
    RET                            ; return control to the calling procedure
  OUTDEC ENDP
+
 
    
         
