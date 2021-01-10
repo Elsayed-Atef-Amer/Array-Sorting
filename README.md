@@ -81,21 +81,58 @@ The key process in quickSort is partition(). Target of partitions is, given an a
     *xp = *yp; 
     *yp = temp; 
     }
+    
        //here BUBBLE_SORT function code 
+       
     void BUBBLE_SORT(int arr[], int n)  
     {  
     for (int i = 0; i < n-1; i++)      
-      
-    // Last i elements are already in place  
-    for (int j = 0; j < n-i-1; j++)  
+    
+    for (int j = 0; j < n-i-1; j++)                                 // "j < n-i-1" Because Last i elements are already in place  
         if (arr[j] > arr[j+1])  
             swap(&arr[j], &arr[j+1]);  
     }  
   
+      //here QUICK_SORT code
+      
+    /* This function takes last element as pivot, places 
+    the pivot element at its correct position in sorted 
+    array, and places all smaller (smaller than pivot) 
+    to left of pivot and all greater elements to right 
+    of pivot */
+    
+    int partition (int arr[], int low, int high) 
+    { 
+    int pivot = arr[high];    // pivot 
+    int i = (low - 1);                                                // Index of smaller element 
   
-    function QUICK_SORT (ARR){
-      //here QUICK_SORT code 
-      };
+    for (int j = low; j <= high- 1; j++) 
+    { 
+
+        if (arr[j] <= pivot)                                          // If current element is smaller than or equal to pivot 
+        { 
+            i++;                                                      // increment index of smaller element 
+            swap(&arr[i], &arr[j]); 
+        } 
+    } 
+    swap(&arr[i + 1], &arr[high]); 
+    return (i + 1); 
+    } 
+  
+    /* The main function that implements QuickSort 
+    arr[] --> Array to be sorted, 
+    low  --> Starting index, 
+    high  --> Ending index */
+    
+    void QUICK_SORT(int arr[], int low, int high) 
+    { 
+    if (low < high) 
+    { 
+        int pi = partition(arr, low, high);                          //pi is partitioning index, arr[p] is now at right place 
+       QUICK_SORT(arr, low, pi - 1);                                 // Separately sort elements before partition...
+       QUICK_SORT(arr, pi + 1, high);                                //and after partition 
+    } 
+
     
     main(){
   
@@ -103,10 +140,10 @@ The key process in quickSort is partition(). Target of partitions is, given an a
     
       //condition code
       if(choice == 1){
-       BUBBLE_SORT(ARRAY);
+       BUBBLE_SORT(ARRAY,length of array);
       }
       else if (choice == 2){
-        QUICK_SORT(ARRAY);
+        QUICK_SORT(ARRAY,starting index,last index);
       }
       else{
         printf('Error invaild input');
