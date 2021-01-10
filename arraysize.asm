@@ -6,7 +6,7 @@
     PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number ',0AH,0DH,'$'
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Quick:',0AH,0DH,'$'
-    ARRAY DW 100 DUP(?)
+    ARRAY DW 255 DUP(?)
     
     
     
@@ -119,11 +119,6 @@ mov bl,al
    
 @MOVE_BACK0:                  ; jump label
 
-     MOV AX, BX                   ; set AX=BX
-     MOV BX, 10                   ; set BX=10
-     DIV BX                       ; set AX=AX/BX
-
-     MOV BX, AX                   ; set BX=AX
 
      MOV AH, 2                    ; set output function
      MOV DL, 20H                  ; set DL=' '
@@ -222,23 +217,21 @@ mov bl,al
 pop bx
 
 
-        MOV CX, BX                       ; set CX=BX
-        @PRINT_ARRAY0:                    ; loop label
-            MOV AX, [SI]                 ; set AX=AX+[SI]
-
-            ;CALL OUTDEC                  ; call the procedure OUTDEC
-            MOV DS,BX
+        MOV CX, BX                       ; set CX=BX  
+        dec CX
+        
+            MOV DS,CX
             MOV DX, DS
             OLOOP:
                 MOV DX, DS
                 LEA SI,ARRAY
 
             ILOOP:
-                MOV AL, [SI]                 ; Because compare can't have both memory
-                CMP AL, [SI+2]
+                MOV AX, [SI]                 ; Because compare can't have both memory
+                CMP AX, [SI+2]
                 JL COMMON                      ; if al is less than [si+2] Skip the below two lines for swapping.
-                XCHG AL, [SI+2]
-                MOV [SI], AL                    ; Coz we can't use two memory locations in xchg directly.
+                XCHG AX, [SI+2]
+                MOV [SI], AX                    ; Coz we can't use two memory locations in xchg directly.
 
                 COMMON:
                 ADD SI,2                      ; INCREAMENT BY TWO
@@ -253,7 +246,7 @@ pop bx
 
             ADD SI, 2                    ; set SI=SI+2
             
-            LOOP @PRINT_ARRAY0            ; jump to label @PRINT_ARRAY while CX!
+
         
     
 
