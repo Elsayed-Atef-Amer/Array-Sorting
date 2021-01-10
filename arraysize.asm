@@ -214,31 +214,33 @@ mov bl,al
 
 @BUBBLE_SORT:
   
-pop bx
+pop bx  
+xor ax,ax
 
 
         MOV CX, BX                       ; set CX=BX  
         dec CX
         
             MOV DS,CX
-            MOV DX, DS
+
             OLOOP:
                 MOV DX, DS
                 LEA SI,ARRAY
 
             ILOOP:
-                MOV AX, [SI]                 ; Because compare can't have both memory
-                CMP AX, [SI+2]
+                MOV AL, [si]                 ; Because compare can't have both memory
+                CMP AL, [si+2]
                 JL COMMON                      ; if al is less than [si+2] Skip the below two lines for swapping.
-                XCHG AX, [SI+2]
-                MOV [SI], AX                    ; Coz we can't use two memory locations in xchg directly.
+                XCHG AL, [SI+2]
+                MOV [SI], AL                    ; Coz we can't use two memory locations in xchg directly.
 
                 COMMON:
-                ADD SI,2                      ; INCREAMENT BY TWO
-                LOOP ILOOP
+                ADD SI,2                           ; INCREAMENT BY TWO
+                DEC DX                   
+                JNZ ILOOP
 
-            DEC DX
-            JNZ OLOOP
+            
+            Loop OLOOP
 
             MOV AH, 2                    ; set output function
             MOV DL, 20H                  ; set DL=20H
