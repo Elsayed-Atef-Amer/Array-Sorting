@@ -6,7 +6,7 @@
     PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number ',0AH,0DH,'$'
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Quick:',0AH,0DH,'$'
-    PROMPT_6  DW  ,0AH,0DH,'your sorted aray is:$'
+    PROMPT_6  DW  ,0AH,0DH,'your sorted array is:$'
     ARRAY DW 255 DUP(?)
     
     
