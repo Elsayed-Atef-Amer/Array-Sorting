@@ -6,7 +6,7 @@
     PROMPT_2  DW  'The Array elements are : $'  
     PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number $'
     PROMPT_4  DB  'please,choice Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :',0DH,0AH,'$'  
-    
+    PROMPT_5  DB 'INVAILD INPUT ONLY 1 for bubble and 2 for quick sort: $'
     ARRAY DW 100 DUP(?)
 
 
@@ -183,7 +183,9 @@ mov bl,al
    MOV AH, 2                      ; set output function
    MOV DL, 7H                     ; set DL=7H
    INT 21H                        ; print a character
-      
+   LEA DX, PROMPT_5             ; load and display the string PROMPT_5
+   MOV AH, 9                    
+   INT 21H   
       
       @CLEAR0:                        ; jump label
      MOV DL, 8H                   ; set DL=8H (backspace in ascii)
@@ -218,10 +220,43 @@ mov bl,al
 
 
 @BUBBLE_SORT0:
-    
-             mov ah,4ch
-             int 21h
-    
+ 
+        MOV AH,4CH
+        INT 21H
+        
+        MOV CX, BX                       ; set CX=BX
+        @PRINT_ARRAY0:                    ; loop label
+            MOV AX, [SI]                 ; set AX=AX+[SI]
+
+            CALL OUTDEC                  ; call the procedure OUTDEC
+            MOV DS,BX
+            MOV DX, DS
+            OLOOP:
+                MOV DX, DS
+                LEA SI,ARRAY
+
+            ILOOP:
+                MOV AL, [SI]                 ; Because compare can't have both memory
+                CMP AL, [SI+2]
+                JL COMMON                      ; if al is less than [si+2] Skip the below two lines for swapping.
+                XCHG AL, [SI+2]
+                MOV [SI], AL                    ; Coz we can't use two memory locations in xchg directly.
+
+                COMMON:
+                ADD SI,2                      ; INCREAMENT BY TWO
+                LOOP ILOOP
+
+            DEC DX
+            JNZ OLOOP
+
+            MOV AH, 2                    ; set output function
+            MOV DL, 20H                  ; set DL=20H
+            INT 21H                      ; print a character
+
+            ADD SI, 2                    ; set SI=SI+2
+            
+            LOOP @PRINT_ARRAY0            ; jump to label @PRINT_ARRAY while CX!
+        
 
 
 @QUICK_SORT0:
@@ -608,52 +643,61 @@ mov bl,al
 
    RET                            ; return control to the calling procedure 
    Array_SizeP ENDP
-  
-   ;------------------------------------------------------------------------------
-   ;------------------------------BUBBLE_SORT------------------------------------------------
-   ;---------------------------------------------------------------------------------
-   ;---------------------------------------------------------------------------------
+  ;**************************************************************************;
+ ;--------------------------------  OUTDEC  --------------------------------;
+ ;**************************************************************************;
+ OUTDEC PROC
+   ; this procedure will display a decimal number
+   ; input : AX
+   ; output : none
+
+   PUSH BX                        ; push BX onto the STACK
+   PUSH CX                        ; push CX onto the STACK
+   PUSH DX                        ; push DX onto the STACK
    
-    BUBBLE_SORT PROC  
+   CMP AX, 0                      ; compare AX with 0
+   JGE @START                     ; jump to label @START if AX>=0
+
+   PUSH AX                        ; push AX onto the STACK
+
+   MOV AH, 2                      ; set output function
+   MOV DL, "-"                    ; set DL='-'
+   INT 21H                        ; print the character
+
+   POP AX                         ; pop a value from STACK into AX
+
+   NEG AX                         ; take 2's complement of AX
+
+   @START:                        ; jump label
+
+   XOR CX, CX                     ; clear CX
+   MOV BX, 10                     ; set BX=10
+
+   @OUTPUT:                       ; loop label
+     XOR DX, DX                   ; clear DX
+     DIV BX                       ; divide AX by BX
+     PUSH DX                      ; push DX onto the STACK
+     INC CX                       ; increment CX
+     OR AX, AX                    ; take OR of Ax with AX
+   JNE @OUTPUT                    ; jump to label @OUTPUT if ZF=0
+
+   MOV AH, 2                      ; set output function
+
+   @DISPLAY:                      ; loop label
+     POP DX                       ; pop a value from STACK to DX
+     OR DL, 30H                   ; convert decimal to ascii code
+     INT 21H                      ; print a character
+   LOOP @DISPLAY                  ; jump to label @DISPLAY if CX!=0                       
+                                                                      
+   POP DX                         ; pop a value from STACK into DX      
+   POP CX                         ; pop a value from STACK into CX       
+   POP BX                         ; pop a value from STACK into BX
+
+   RET                            ; return control to the calling procedure
+ OUTDEC ENDP
    
-
-    MOV DS,BX
-    
-    MOV DX,DS 
-    
-    XOR AX,AX 
-    
-    XOR CX,CX 
-    SUB BX,1                        ;DECREMENT lengt by 1
-    
-    ADD BX,BX                       ;multiply length-1 by 2
-    
-    MOV CX,SI                       ;store last value of SI register into CX register
-    
-    SUB CX,BX                       ;get adress of first element of array CX = si-2(bx-1) //last adress in our loop
-     oloop:
-        mov dx, ds
-        lea si, ARRAY     
-         
-
-        iloop:  
-        cmp si,CX
-        je   oloop
-            mov AX, [si]                 ; Because compare can't have both memory
-            cmp AX, [si-2]
-            jl common                      ; if al is less than [si+1] Skip the below two lines for swapping.
-            xchg AX, [si-2]
-            mov [si], AX                    ; Coz we can't use two memory locations in xchg directly.
-
-            common:
-                sub si,2
-                loop iloop
-
-        dec dx
-        jnz oloop
-    
    
-   BUBBLE_SORT ENDP
+   
 
  END MAIN
  
