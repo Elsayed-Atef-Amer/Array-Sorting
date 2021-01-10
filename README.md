@@ -70,11 +70,11 @@ The key process in quickSort is partition(). Target of partitions is, given an a
 
 
   
-**C code :**
+**C++ code :**
 
-     /// c code:
      
-     //Swap function
+     
+        //Swap function
     void swap(int *xp, int *yp) 
     { 
     int temp = *xp; 
@@ -137,22 +137,32 @@ The key process in quickSort is partition(). Target of partitions is, given an a
     main(){
   
       //define variables and take inputs from user code 
-    
+      int length,choice;
+      int starting_index =0;
+      cout<<"please enter the length of array";
+      cin >>length;
+      int array[length];
+      cout <<"please enter elements of array";
+      for(int i=0;i<length;i++)
+      {
+      cin >> array[i];
+      }
+      cout <<"please enter 1 for Bubble sort OR 2 for Quick sort";
+      cin >> choice;
       //condition code
       if(choice == 1){
-       BUBBLE_SORT(ARRAY,length of array);
+      BUBBLE_SORT(array,length);
       }
-      else if (choice == 2){
-        QUICK_SORT(ARRAY,starting index,last index);
+      else if (choice == 2){ 
+      QUICK_SORT(array,starting_index,length-1);
       }
       else{
-        printf('Error invaild input');
-      }  
-    }
+          cout <<"Error invaild input";
+      }
   
   
   
-  
+      }
   
   
   
