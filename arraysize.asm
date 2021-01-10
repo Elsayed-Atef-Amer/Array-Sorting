@@ -654,7 +654,40 @@ mov bl,al
     
    
    BUBBLE_SORT ENDP
-                      
+        ;**************************************************************************;
+ ;-----------------------------  PRINT_ARRAY  ------------------------------;
+ ;**************************************************************************;
+
+ PRINT_ARRAY PROC
+   ; this procedure will print the elements of a given array
+   ; input : SI=offset address of the array
+   ;       : BX=size of the array
+   ; output : none
+
+   PUSH AX                        ; push AX onto the STACK   
+   PUSH CX                        ; push CX onto the STACK
+   PUSH DX                        ; push DX onto the STACK
+
+   MOV CX, BX                     ; set CX=BX
+
+   @PRINT_ARRAY:                  ; loop label
+     MOV AX, [SI]                 ; set AX=AX+[SI]
+
+     CALL OUTDEC                  ; call the procedure OUTDEC
+
+     MOV AH, 2                    ; set output function
+     MOV DL, 20H                  ; set DL=20H
+     INT 21H                      ; print a character
+
+     ADD SI, 2                    ; set SI=SI+2
+   LOOP @PRINT_ARRAY              ; jump to label @PRINT_ARRAY while CX!=0
+
+   POP DX                         ; pop a value from STACK into DX
+   POP CX                         ; pop a value from STACK into CX
+   POP AX                         ; pop a value from STACK into AX
+
+   RET                            ; return control to the calling procedure
+ PRINT_ARRAY ENDP               
  ;**************************************************************************;
  ;--------------------------------  OUTDEC  --------------------------------;
  ;**************************************************************************;
