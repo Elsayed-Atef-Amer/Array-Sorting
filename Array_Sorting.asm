@@ -638,7 +638,7 @@ OUTDEC PROC
 
    @PRINT_ARRAY:                  ; loop label
      XOR AH, AH                   ; clear AH
-     MOV AL, [SI]                 ; set AL=[SI]
+     MOV AX, [SI]                 ; set AL=[SI]
 
      CALL OUTDEC                  ; call the procedure OUTDEC
 
