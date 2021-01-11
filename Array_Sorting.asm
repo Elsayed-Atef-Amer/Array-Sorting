@@ -4,7 +4,7 @@
  
     PROMPT_1  DW  'Enter Array size :$'
     PROMPT_2  DW  ,0AH,0DH,'The Array elements are :$'  
-    PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number ',0AH,0DH,'$'
+    PROMPT_3  DW  ,0AH,0DH,'array size cant but a POSITIVE Integer, $'
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for SELECTION sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Selection:',0AH,0DH,'$'
     PROMPT_6  DW  ,0AH,0DH,'your sorted array is:$'
@@ -145,6 +145,7 @@
    @CHECK_BUBBLE:                 ; CHECK_BUBBLE label
     CMP BL,31h                    ; check if input equals to ASKII(1)
     JE @BUBBLE_SORT               ; JUMP to BUBBLE_SORT if input equals to ASKII(1)
+    JNE @CHECK_SELECT              ; JUMP to CHECK_SELECT if input not equals to ASKII(1)
 
    @CHECK_SELECT:                 ; CHECK_SELECT label
     CMP BL,32h                    ; check if input equals to ASKII(2)
