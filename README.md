@@ -12,11 +12,11 @@
   These algorithms take an input list, process it (i.e. perform some operations on it) and produce the sorted list.
   Types of Sorting Algorithms:
       
-      1-Quick Sort
-      2-Bubble Sort
+      1-Bubble Sort
+      2-Selection Sort
       3-Merge Sort
       4-Insertion Sort
-      5-Selection Sort
+      5-Quick Sort
       6-Heap Sort
       7-Radix Sort
       8-Bucket Sort
@@ -61,7 +61,7 @@
   3. Taking the second input 'ARRAY' element by element from the user using 'READ_ARRAY' function in our code.
   4. Condition code.
   6. Bubble sort code.
-  7. Quick sort code.
+  7. Selection sort code.
   
 **Bubble Sort Algorithm**
 
@@ -79,27 +79,20 @@
   
   -An example shown in figure below
   
-  ![](Images/Bubble-sort-example.gif)
+  ![Bubble-sort-example](Images/Bubble-sort-example.gif)
 
-**QuickSort Algorithm**
+**Selection Sort Algorithm**
 
+The selection sort algorithm sorts an array by repeatedly finding the minimum element (considering ascending order) from unsorted part and putting it at the beginning. The algorithm maintains two subarrays in a given array.
 
-Like Merge Sort, QuickSort is a Divide and Conquer algorithm. It picks an element as pivot and partitions the given array around the picked pivot. There are many different versions of quickSort that pick pivot in different ways.   
+1) The subarray which is already sorted.
+2) Remaining subarray which is unsorted.
 
-1-  Always pick first element as pivot.
-
-2-Always pick last element as pivot (implemented below)
-
-3-Pick a random element as pivot.
-
-4-Pick median as pivot
+In every iteration of selection sort, the minimum element (considering ascending order) from the unsorted subarray is picked and moved to the sorted subarray.
  
-The key process in quickSort is partition(). Target of partitions is, given an array and an element x of array as pivot, put x at its correct position in sorted array and put all smaller elements (smaller than x) before x, and put all greater elements (greater than x) after x. All this should be done in linear time
+  -An example shown in figure below
  
- -An example shown in figure below
- 
- 
-![Quicksort-example](https://user-images.githubusercontent.com/76921794/104107197-5d97a980-526f-11eb-93d6-a98e8372d04b.gif)
+![Selection-Sort-example](Images/selection_sort.gif)
 
 
   
