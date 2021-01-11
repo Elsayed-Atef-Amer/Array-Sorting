@@ -145,7 +145,6 @@
    @CHECK_BUBBLE:                 ; CHECK_BUBBLE label
     CMP BL,31h                    ; check if input equals to ASKII(1)
     JE @BUBBLE_SORT               ; JUMP to BUBBLE_SORT if input equals to ASKII(1)
-    JNE @CHECK_QUICK              ; JUMP to CHECK_SELECT if input not equals to ASKII(1)
 
    @CHECK_SELECT:                 ; CHECK_SELECT label
     CMP BL,32h                    ; check if input equals to ASKII(2)
