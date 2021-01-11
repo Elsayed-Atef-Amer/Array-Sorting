@@ -1,4 +1,4 @@
- .MODEL SMALL
+.MODEL SMALL
  .STACK 100H
  .DATA
     PROMPT_1  DW  'Enter Array size :$'
@@ -240,9 +240,9 @@ pop bx
    
                       ; set CX=BX
    DEC CX 
-   
+      push bx
    @Skip_dec:
-   push bx                        ; set CX=CX-1
+                           ; set CX=CX-1
 
    @OUTER_LOOP:                   ; loop label
      MOV BX, CX                   ; set BX=CX
@@ -290,10 +290,65 @@ pop bx
              
           
           
-        POP DX                         ; pop a value from STACK into DX
-        POP CX                         ; pop a value from STACK into CX
+      ;  POP DX                         ; pop a value from STACK into DX
+       ; POP CX                         ; pop a value from STACK into CX
         POP BX                         ; pop a value from STACK into BX   
-        pop AX                                                        
+       ; pop AX     
+         ; this procedure will sort the array in ascending order
+   ; input : SI=offset address of the array
+   ;       : BX=array size
+   ; output :none
+
+   PUSH AX                        ; push AX onto the STACK  
+   ;PUSH BX                        ; push BX onto the STACK
+   PUSH CX                        ; push CX onto the STACK
+   PUSH DX                        ; push DX onto the STACK
+   PUSH DI                        ; push DI onto the STACK
+   ;pop BX
+   CMP BX, 1                      ; compare BX with 1
+   JLE @SKIP_SORTING              ; jump to label @SKIP_SORTING if BX<=1
+          push BX
+   DEC BX                         ; set BX=BX-1
+   MOV CX, BX                     ; set CX=BX
+   MOV AX, SI                     ; set AX=SI
+
+   @OUTER_LOOP2:                   ; loop label
+     MOV BX, CX                   ; set BX=CX
+     MOV SI, AX                   ; set SI=AX
+     MOV DI, AX                   ; set DI=AX
+     MOV DX, [DI]                 ; set DL=[DI]
+
+     @INNER_LOOP2:                 ; loop label
+       INC SI                     ; set SI=SI+1
+       INC SI                     ; set SI=SI+1
+
+       CMP [SI], DX               ; compare [SI] with DL
+       JNG @SKIP2                  ; jump to label @SKIP if [SI]<=DL
+
+       MOV DI, SI                 ; set DI=SI
+       MOV DX, [DI]               ; set DL=[DI]
+
+       @SKIP2:                     ; jump label
+
+       DEC BX                     ; set BX=BX-1
+     JNZ @INNER_LOOP2              ; jump to label @INNER_LOOP if BX!=0
+
+     MOV DX, [SI]                 ; set DL=[SI]
+     XCHG DX, [DI]                ; set DL=[DI] , [DI]=DL
+     MOV [SI], DX                 ; set [SI]=DL
+
+   LOOP @OUTER_LOOP2               ; jump to label @OUTER_LOOP while CX!=0
+
+   @SKIP_SORTING:                 ; jump label
+   
+  ; POP DI                         ; pop a value from STACK into DI
+   ;POP DX                         ; pop a value from STACK into DX
+   ;POP CX                         ; pop a value from STACK into CX
+    ;  POP AX                         ; pop a value from STACK into AX
+            ;  POP BX                         ; pop a value from STACK into BX
+
+                              ; return control to the calling procedure
+
         
         @ENDSORT: 
                        
@@ -304,13 +359,14 @@ pop bx
                        
                        
              LEA SI, ARRAY                ; set SI=offset address of ARRAY
-
+      POP BX
      CALL PRINT_ARRAY             ; call the procedure PRINT_ARRAY
 
      MOV AH, 4CH                  ; return control to DOS
      INT 21H
      
-        RET
+        RET 
+        
   CONDITION ENDP
 ;-------------------------------------------------------------------------
 ;------------------------------------------------------------------------
@@ -671,4 +727,3 @@ OUTDEC PROC
  PRINT_ARRAY ENDP
 
  END MAIN
- 
