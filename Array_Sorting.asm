@@ -1,6 +1,7 @@
 .MODEL SMALL
  .STACK 100H
  .DATA
+ 
     PROMPT_1  DW  'Enter Array size :$'
     PROMPT_2  DW  ,0AH,0DH,'The Array elements are :$'  
     PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number ',0AH,0DH,'$'
@@ -9,179 +10,125 @@
     PROMPT_6  DW  ,0AH,0DH,'your sorted array is:$'
      PROMPT_7  DW  ,0AH,0DH,'your sorted reverse array is:$'
     ARRAY DW 255 DUP(?)    
+ 
  .CODE
-   MAIN PROC
-     MOV AX, @DATA                ; initialize DS
+ 
+  MAIN PROC
+  
+     MOV AX, @DATA                ; initialize data segment ds
      MOV DS, AX
-     LEA DX, PROMPT_1             ; load and display the string PROMPT_1
+     LEA DX, PROMPT_1             ; load and display the string PROMPT_1,  user interface(UI) , to take the first array size from user.
      MOV AH, 9                    ;AH value for dos interrupt output a message
-     INT 21H
+     INT 21H                      ;interrupt dos that takes input from user
+    
      LEA SI, ARRAY                ; set SI=offset address of ARRAY
      CALL Array_SizeP             ; call the procedure READ_Size
-     
-     
-     AND AX, 00FFH 
-     
-     MOV BX,AX                  ; to get the value of only AL as the size of array
-   
-     LEA DX, PROMPT_2             ; load and display the string PROMPT_2
-     MOV AH, 9                    
-     INT 21H
-     
-     CALL READ_ARRAY             ; call the procedure READ_ARRAY
-     
-     LEA DX, PROMPT_4            ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
-     MOV AH, 9                    ;AH value for dos interrupt output a message
-     INT 21H
-     LEA SI,ARRAY
-     
-     CALL CONDITION
-                    
-                    
-
-     
+      
+     AND AX, 00FFH                ; to get the value of only AL as the size of array
+     MOV BX,AX                    ; put value of AL in to BX register BX=AX
   
-     ;CALL BUBBLE_SORT
-;the array size element is stored in AL register at this point which is 8bit in size, for further edits 
-;
-;
-;
-;
-;
-     MOV AH, 4CH                  ;AH Value for dos interrupt exit program
-     INT 21H
-   MAIN ENDP
-;-------------------------------------------------------------------------
-;-------------------CONDITION PROC===-------------------------------------
-;------------------------------------------------------------------------ 
- CONDITION PROC 
-    
-   @READ0:
-   push cx
-
-   push ax 
-   push dx 
-      push bx
-xor cx,cx
-xor bx,bx 
-xor ax,ax
-
-Mov AH,1                        ;read a character
-INT 21h                         ;interrupt dos that takes input from user
+     LEA DX, PROMPT_2             ; load and display the string PROMPT_2, user interface(UI), to take the farray elements from user.
+     MOV AH, 9                    ;AH value for dos interrupt output a message
+     INT 21H                      ;interrupt dos that takes input from user
      
-cmp    al, '-'                  ;compare input with -
-JE @NEGATIVE    
-cmp al,'+'                      ;compare input with +
-jE    @POSITIVE        
-jmp @input0              
+     CALL READ_ARRAY              ; call the procedure READ_ARRAY
+     
+     LEA DX, PROMPT_4             ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
+     MOV AH, 9                    ;AH value for dos interrupt output a message
+     INT 21H                      ; interrupt
+    
+     LEA SI,ARRAY                 ; load array offset to SI
+     CALL CONDITION               ; call condition function to make a decision of sort type to use 
+    
+    MOV AH, 4CH                   ;AH Value for dos interrupt exit program
+     INT 21H                      ;interrupt dos that takes input from user
+     
+   MAIN ENDP
+
+;-------------------CONDITION function-----------------------------------
+   CONDITION PROC 
+   
+    @READ0:
+     PUSH CX                      ; push CX onto the STACK  
+     PUSH AX                      ; push AX onto the STACK  
+     PUSH DX                      ; push DX onto the STACK  
+     PUSH BX                      ; push BX onto the STACK  
+    
+     XOR CX,CX                    ; make CX register equals to zero, CX==0
+     XOR BX,BX                    ; make BX register equals to zero, BX==0
+     XOR AX,AX                    ; make AX register equals to zero, AX==0
+     
+     Mov AH,1                     ;read a character
+     INT 21h                      ;interrupt dos that takes input from user
+     
+     cmp    al, '-'               ;compare input with -
+     JE @NEGATIVE                 ; JUMP to NEGATIVE lable if the input equals(-)
+     
+     cmp al,'+'                   ;compare input with +
+     jE @POSITIVE                 ; JUMP to POSITIVE lable if the input equals(+)       
+     jmp @input0                  ; JUMP to input0 lable        
               
+    @NEGATIVE:                    ; NEGATIVE lable
+     INC CL                       ; CL=CL+1
+     JMP @ERROR0                  ; JUMP to ERROR0 lable
+   
+    @POSITIVE:                    ; POSITIVE lable
+     INC CL                       ; CL=CL+1
+     JMP @ERROR0                  ; JUMP to ERROR0 lable 
+                 
+    @INPUT0:                      ; INPUT0 lable
+     MOV BL,AL                    ; BL=AL
+     MOV AH, 1                    ;read a character
+     INT 21H                      ;interrupt dos that takes input from user
 
-
-
-   
-   
-@NEGATIVE:
-INC CL
-JMP @ERROR0
-   
-   
-@POSITIVE:
-INC CL
-JMP @ERROR0   
-   
-   
-              
-@INPUT0:
-mov bl,al
-                        ; jump label
-     MOV AH, 1                    ; set input function
-     INT 21H                      ; read a character
-
-@SKIP_INPUT0:                 ; jump label
-
+    @SKIP_INPUT0:                 ; SKIP_INPUT0 label
      CMP AL, 0DH                  ; compare AL with Return (enter)
-     JE @END_INPUT0                ; jump to label @END_INPUT
+     JE @END_INPUT0               ; jump to label @END_INPUT if the input equals (enter)  
 
      CMP AL, 8H                   ; compare AL with 8H   (backspace)
-     JNE @NOT_BACKSPACE0           ; jump to label @NOT_BACKSPACE if AL!=8
+     JNE @NOT_BACKSPACE0          ; jump to label @NOT_BACKSPACE if AL!=8
  
- 
-
-
-
-
-
-                         
-   
-@MOVE_BACK0:                  ; jump label
-
-
+    @MOVE_BACK0:                  ; MOVE_BACK0 label
      MOV AH, 2                    ; set output function
      MOV DL, 20H                  ; set DL=' '
      INT 21H                      ; print a character
-
      MOV DL, 8H                   ; set DL=8H
      INT 21H                      ; print a character
-
      XOR DX, DX                   ; clear DX
      DEC CL                       ; set CL=CL-1
-
-     JMP @INPUT0                   ; jump to label @INPUT
-
-
-
-
-
-
+     JMP @INPUT0                  ; jump to label @INPUT0     
         
-        
-        
-@NOT_BACKSPACE0:              ; jump label
-
+    @NOT_BACKSPACE0:              ; NOT_BACKSPACE0 label
      INC CL                       ; set CL=CL+1
-
      CMP AL, 30H                  ; compare AL with 0
-     JL @ERROR0                    ; jump to label @ERROR if AL<0
-
+     JL @ERROR0                   ; jump to label @ERROR0if AL<0
      CMP AL, 39H                  ; compare AL with 9
-     JG @ERROR0                    ; jump to label @ERROR if AL>9
-
+     JG @ERROR0                   ; jump to label @ERROR0if AL>9
      AND AX, 000FH                ; convert ascii to decimal code
-
+     
      PUSH AX                      ; push AX onto the STACK
-
      MOV AX, 10                   ; set AX=10
      MUL BX                       ; set AX=AX*BX
      MOV BX, AX                   ; set BX=AX
-
      POP AX                       ; pop a value from STACK into AX
-
      ADD BX, AX                   ; set BX=AX+BX
-     JS @ERROR0                    ; jump to label @ERROR if SF=1
-   JMP @INPUT0                     ; jump to label @INPUT
-        
-        
-        
-        
-        
+     JS @ERROR0                   ; jump to label @ERROR if SF=1
+     JMP @INPUT0                  ; jump to label @INPUT0       
                          
-@ERROR0:                        ; jump label
-
-   MOV AH, 2                      ; set output function
-   MOV DL, 7H                     ; set DL=7H
-   INT 21H                        ; print a character
-      
-      
-      @CLEAR0:                        ; jump label
+    @ERROR0:                      ; ERROR0 label
+     MOV AH, 2                    ; set output function
+     MOV DL, 7H                   ; set DL=7H
+     INT 21H                      ; print a character
+     
+    @CLEAR0:                      ; CLEAR0 label
      MOV DL, 8H                   ; set DL=8H (backspace in ascii)
      INT 21H                      ; print a character
-
-     MOV DL, 20H                  ; set DL=' '    (Space in ascii)
+     MOV DL, 20H                  ; set DL=' '(Space in ascii)
      INT 21H                      ; print a character
-
-     MOV DL, 8H                   ; set DL=8H          (backspace in ascii)
+     MOV DL, 8H                   ; set DL=8H (backspace in ascii)
      INT 21H                      ; print a character
-   LOOP @CLEAR0                    ; jump to label @CLEAR if CX!=0
+     
+   LOOP @CLEAR0                   ; jump to label @CLEAR if CX!=0
 
    JMP @READ0                      ; jump to label @READ
        
