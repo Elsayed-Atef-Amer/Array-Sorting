@@ -271,14 +271,7 @@ pop bx
      JNZ @INNER_LOOP              ; jump to label @INNER_LOOP if BX!=0
    LOOP @OUTER_LOOP               ; jump to label @OUTER_LOOP while CX!=0
       
-      POP BX
-   POP DI                         ; pop a value from STACK into DI
-   POP DX                         ; pop a value from STACK into DX
-   POP CX                         ; pop a value from STACK into CX
-                            ; pop a value from STACK into BX
-   POP AX                         ; pop a value from STACK into AX
-   
-   
+
    
    jmp @ENDSORT
 
