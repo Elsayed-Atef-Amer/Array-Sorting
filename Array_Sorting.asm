@@ -8,7 +8,8 @@
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for SELECTION sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Selection:',0AH,0DH,'$'
     PROMPT_6  DW  ,0AH,0DH,'your sorted array is:$'
-     PROMPT_7  DW  ,0AH,0DH,'your sorted reverse array is:$'
+    PROMPT_7  DW  ,0AH,0DH,'your sorted reverse array is:$'
+    PROMPT_8  DW  ,0AH,0DH,'your Array has no elements,please enter POSITIVE integer:$'
     ARRAY DW 255 DUP(?)    
  
  .CODE
@@ -22,8 +23,10 @@
      INT 21H                      ;interrupt dos that takes input from user
     
      LEA SI, ARRAY                ; set SI=offset address of ARRAY
+    
+    @No_Elements:
      CALL Array_SizeP             ; call the procedure READ_Size
-      
+     
      AND AX, 00FFH                ; to get the value of only AL as the size of array
      MOV BX,AX                    ; put value of AL in to BX register BX=AX
   
@@ -39,11 +42,17 @@
     
      LEA SI,ARRAY                 ; load array offset to SI
      CALL CONDITION               ; call condition function to make a decision of sort type to use 
-    
-    MOV AH, 4CH                   ;AH Value for dos interrupt exit program
+ 
+    @No_Elements1:
+     LEA DX, PROMPT_8             ; load and display the string PROMPT_1
+     MOV AH, 9                    ;AH value for dos interrupt output a message
      INT 21H                      ;interrupt dos that takes input from user
+     jmp @No_Elements             ; jump No_Elements label 
      
-   MAIN ENDP
+     MOV AH, 4CH                  ;AH Value for dos interrupt exit program
+     INT 21H                      ;interrupt dos that takes input from user              
+ 
+  MAIN ENDP
 
 ;-------------------CONDITION function-----------------------------------
    CONDITION PROC 
@@ -126,61 +135,34 @@
      MOV DL, 20H                  ; set DL=' '(Space in ascii)
      INT 21H                      ; print a character
      MOV DL, 8H                   ; set DL=8H (backspace in ascii)
-     INT 21H                      ; print a character
-     
-   LOOP @CLEAR0                   ; jump to label @CLEAR if CX!=0
-
-   JMP @READ0                      ; jump to label @READ
+     INT 21H                      ; print a character 
+    LOOP @CLEAR0                  ; jump to label @CLEAR0 if CX!=0
+    JMP @READ0                    ; jump to label @READ0
        
- @END_INPUT0:                    ; jump label
-           
-           @CHECK_BUBBLE:  
+   @END_INPUT0:                   ; END_INPUT0 label
+   
+   @CHECK_BUBBLE:                 ; CHECK_BUBBLE label
+    CMP BL,31h                    ; check if input equals to ASKII(1)
+    JE @BUBBLE_SORT               ; JUMP to BUBBLE_SORT if input equals to ASKII(1)
+    JNE @CHECK_QUICK              ; JUMP to CHECK_SELECT if input not equals to ASKII(1)
 
-    cmp bL,31h
-    je @BUBBLE_SORT
-    jne @CHECK_QUICK 
- 
- 
- 
-@CHECK_QUICK:
-            cmp bL,32h
-            je @QUICK_SORT 
-            
-            LEA DX, PROMPT_5
-            MOV AH, 9
-            INT 21H
+   @CHECK_SELECT:                 ; CHECK_SELECT label
+    CMP BL,32h                    ; check if input equals to ASKII(2)
+    JE @SELECT_SORT               ; JUMP to SELECT_SORT if input equals to ASKII(2)
+    LEA DX, PROMPT_5              ; load and display the string PROMPT_5, user interface(UI), to take a nother input from user.
+    MOV AH, 9                     ;AH value for dos interrupt output a message
+    INT 21H                       ;interrupt dos that takes input from user
+    MOV CX,1                      , CX=1
+    Jne @ERROR0                   ; JUMP to ERROR0 if input not equals to ASKII(2)            
 
-            MOV CX,1
-            Jne @ERROR0
-
-
-
-@BUBBLE_SORT:
-  
-pop bx  
-
-
-
-
-   PUSH AX                        ; push AX onto the STACK  
-                      ; push BX onto the STACK
-   PUSH CX                        ; push CX onto the STACK
-   PUSH DX                        ; push DX onto the STACK
-   PUSH DI                        ; push DI onto the STACK
-
+  @BUBBLE_SORT:
+   pop bx  
    MOV AX, SI                     ; set AX=SI
-
-   
    MOV CX, BX  
-   
-   cmp cx,1
-   jle  @Skip_Dec
-   
-                      ; set CX=BX
-   DEC CX 
-      push bx
-   @Skip_dec:
-                           ; set CX=CX-1
+   push bx
+   cmp cx,1 
+   jle  @Skip_Dec                 
+   DEC CX                         ; set CX=CX-1
 
    @OUTER_LOOP:                   ; loop label
      MOV BX, CX                   ; set BX=CX
@@ -208,7 +190,7 @@ pop bx
        DEC BX                     ; set BX=BX-1
      JNZ @INNER_LOOP              ; jump to label @INNER_LOOP if BX!=0
    LOOP @OUTER_LOOP               ; jump to label @OUTER_LOOP while CX!=0
-      
+     @Skip_dec: 
 
    
    jmp @ENDSORT
@@ -216,7 +198,8 @@ pop bx
 
 
 
-@QUICK_SORT:
+
+@SELECT_SORT:
    
              
           
@@ -230,13 +213,14 @@ pop bx
    ;       : BX=array size
    ; output :none
 
-   PUSH AX                        ; push AX onto the STACK  
+   ;PUSH AX                        ; push AX onto the STACK  
    ;PUSH BX                        ; push BX onto the STACK
-   PUSH CX                        ; push CX onto the STACK
-   PUSH DX                        ; push DX onto the STACK
-   PUSH DI                        ; push DI onto the STACK
+   ;PUSH CX                        ; push CX onto the STACK
+   ;PUSH DX                        ; push DX onto the STACK
+   ;PUSH DI                        ; push DI onto the STACK
    ;pop BX
-   CMP BX, 1                      ; compare BX with 1
+   CMP BX, 1 
+   push BX                     ; compare BX with 1
    JLE @SKIP_SORTING              ; jump to label @SKIP_SORTING if BX<=1
           push BX
    DEC BX                         ; set BX=BX-1
@@ -302,7 +286,6 @@ pop bx
      INT 21H
      
         RET 
-        
   CONDITION ENDP
 ;-------------------------------------------------------------------------
  INDECIMAL PROC
