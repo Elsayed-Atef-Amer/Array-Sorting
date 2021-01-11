@@ -41,7 +41,7 @@
  
 **Project:**
 
-  Our project is array sorting using two techniques (Bubble sort , Quick sort).
+  Our project is array sorting using two techniques (Bubble sort , Selection sort).
     with UI which PROMPT the user  
     
       1- first to enter the size of array.
