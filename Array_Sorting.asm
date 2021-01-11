@@ -26,10 +26,11 @@
     
     @No_Elements:
      CALL Array_SizeP             ; call the procedure READ_Size
-     
      AND AX, 00FFH                ; to get the value of only AL as the size of array
      MOV BX,AX                    ; put value of AL in to BX register BX=AX
-  
+     CMP BX,0                     ; IF input==0
+     je @No_Elements1             ; JUMP to No_Elements1 lable if the input equals(0)
+     
      LEA DX, PROMPT_2             ; load and display the string PROMPT_2, user interface(UI), to take the farray elements from user.
      MOV AH, 9                    ;AH value for dos interrupt output a message
      INT 21H                      ;interrupt dos that takes input from user
@@ -44,7 +45,7 @@
      CALL CONDITION               ; call condition function to make a decision of sort type to use 
  
     @No_Elements1:
-     LEA DX, PROMPT_8             ; load and display the string PROMPT_1
+     LEA DX, PROMPT_8             ; load and display the string PROMPT_8
      MOV AH, 9                    ;AH value for dos interrupt output a message
      INT 21H                      ;interrupt dos that takes input from user
      jmp @No_Elements             ; jump No_Elements label 
@@ -152,140 +153,90 @@
     LEA DX, PROMPT_5              ; load and display the string PROMPT_5, user interface(UI), to take a nother input from user.
     MOV AH, 9                     ;AH value for dos interrupt output a message
     INT 21H                       ;interrupt dos that takes input from user
-    MOV CX,1                      , CX=1
+    MOV CX,1                      ; CX=1
     Jne @ERROR0                   ; JUMP to ERROR0 if input not equals to ASKII(2)            
 
-  @BUBBLE_SORT:
-   pop bx  
-   MOV AX, SI                     ; set AX=SI
-   MOV CX, BX  
-   push bx
-   cmp cx,1 
-   jle  @Skip_Dec                 
-   DEC CX                         ; set CX=CX-1
-
+   @BUBBLE_SORT:
+    POP BX                        ; pop a value from STACK into BX
+    MOV AX, SI                    ; set AX=SI
+    MOV CX, BX                    ; set CX=BX
+    PUSH BX                       ; push BX onto the STACK  
+    CMP CX,1                      ; IF CX<=1
+    JLE  @Skip_Dec                ; JUMP TO Skip_Dec lable
+    DEC CX                        ; set CX=CX-1
+   
    @OUTER_LOOP:                   ; loop label
-     MOV BX, CX                   ; set BX=CX
-
-     MOV SI, AX                   ; set SI=AX
-     MOV DI, AX                   ; set DI=AX
-     INC DI
-     INC DI                       ; set DI=DI+2
-
+    MOV BX, CX                    ; set BX=CX
+    MOV SI, AX                    ; set SI=AX
+    MOV DI, AX                    ; set DI=AX
+    INC DI
+    INC DI                        ; set DI=DI+2
      @INNER_LOOP:                 ; loop label 
        MOV DX, [SI]               ; set DL=[SI]
-
        CMP DX, [DI]               ; compare DL with [DI]
        JNG @SKIP_EXCHANGE         ; jump to label @SKIP_EXCHANGE if DL<[DI]
-
        XCHG DX, [DI]              ; set DL=[DI], [DI]=DL
        MOV [SI], DX               ; set [SI]=DL
-
-       @SKIP_EXCHANGE:            ; jump label
-       INC SI
-       INC SI                     ; set SI=SI+2
-       INC DI
-       INC DI                     ; set DI=DI+2
-
-       DEC BX                     ; set BX=BX-1
+     @SKIP_EXCHANGE:              ; SKIP_EXCHANGE label
+      INC SI 
+      INC SI                      ; set SI=SI+2
+      INC DI
+      INC DI                      ; set DI=DI+2
+      DEC BX                      ; set BX=BX-1
      JNZ @INNER_LOOP              ; jump to label @INNER_LOOP if BX!=0
-   LOOP @OUTER_LOOP               ; jump to label @OUTER_LOOP while CX!=0
-     @Skip_dec: 
-
+    LOOP @OUTER_LOOP              ; jump to label @OUTER_LOOP while CX!=0
    
-   jmp @ENDSORT
+    @Skip_dec:                    ;Skip_dec label
+     jmp @ENDSORT                 ; jump to label @ENDSORT 
 
+    @SELECT_SORT:
+     POP BX                       ; pop a value from STACK into BX   
+     CMP BX, 1                    ; compare BX with 1
+     PUSH BX                      ; push BX onto the STACK                      
+     JLE @SKIP_SORTING            ; jump to label @SKIP_SORTING if BX<=1
+     PUSH BX                      ; push BX onto the STACK    
+     DEC BX                       ; set BX=BX-1
+     MOV CX, BX                   ; set CX=BX
+     MOV AX, SI                   ; set AX=SI
+     
+     @OUTER_LOOP2:                ; loop label
+      MOV BX, CX                  ; set BX=CX
+      MOV SI, AX                  ; set SI=AX
+      MOV DI, AX                  ; set DI=AX
+      MOV DX, [DI]                ; set DL=[DI]
 
-
-
-
-@SELECT_SORT:
-   
-             
-          
-          
-      ;  POP DX                         ; pop a value from STACK into DX
-       ; POP CX                         ; pop a value from STACK into CX
-        POP BX                         ; pop a value from STACK into BX   
-       ; pop AX     
-         ; this procedure will sort the array in ascending order
-   ; input : SI=offset address of the array
-   ;       : BX=array size
-   ; output :none
-
-   ;PUSH AX                        ; push AX onto the STACK  
-   ;PUSH BX                        ; push BX onto the STACK
-   ;PUSH CX                        ; push CX onto the STACK
-   ;PUSH DX                        ; push DX onto the STACK
-   ;PUSH DI                        ; push DI onto the STACK
-   ;pop BX
-   CMP BX, 1 
-   push BX                     ; compare BX with 1
-   JLE @SKIP_SORTING              ; jump to label @SKIP_SORTING if BX<=1
-          push BX
-   DEC BX                         ; set BX=BX-1
-   MOV CX, BX                     ; set CX=BX
-   MOV AX, SI                     ; set AX=SI
-
-   @OUTER_LOOP2:                   ; loop label
-     MOV BX, CX                   ; set BX=CX
-     MOV SI, AX                   ; set SI=AX
-     MOV DI, AX                   ; set DI=AX
-     MOV DX, [DI]                 ; set DL=[DI]
-
-     @INNER_LOOP2:                 ; loop label
+      @INNER_LOOP2:               ; loop label
        INC SI                     ; set SI=SI+1
        INC SI                     ; set SI=SI+1
-
        CMP [SI], DX               ; compare [SI] with DL
-       JNG @SKIP2                  ; jump to label @SKIP if [SI]<=DL
-
+       JNG @SKIP2                 ; jump to label @SKIP if [SI]<=DL
        MOV DI, SI                 ; set DI=SI
        MOV DX, [DI]               ; set DL=[DI]
-
-       @SKIP2:                     ; jump label
-
+       @SKIP2:                    ; SKIP2 label
        DEC BX                     ; set BX=BX-1
-     JNZ @INNER_LOOP2              ; jump to label @INNER_LOOP if BX!=0
-
+     JNZ @INNER_LOOP2             ; jump to label @INNER_LOOP2 if BX!=0
      MOV DX, [SI]                 ; set DL=[SI]
      XCHG DX, [DI]                ; set DL=[DI] , [DI]=DL
      MOV [SI], DX                 ; set [SI]=DL
-
-   LOOP @OUTER_LOOP2               ; jump to label @OUTER_LOOP while CX!=0
-
-   @SKIP_SORTING:                 ; jump label
+    LOOP @OUTER_LOOP2             ; jump to label @OUTER_LOOP2 while CX!=0
    
-  ; POP DI                         ; pop a value from STACK into DI
-   ;POP DX                         ; pop a value from STACK into DX
-   ;POP CX                         ; pop a value from STACK into CX
-    ;  POP AX                         ; pop a value from STACK into AX
-            ;  POP BX                         ; pop a value from STACK into BX
-
-                              ; return control to the calling procedure
-
-        
-        @ENDSORT: 
-                       
-                       
-     LEA DX, PROMPT_6            ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
-     MOV AH, 9                    ;AH value for dos interrupt output a message
-     INT 21H
-                       
-                       
-             LEA SI, ARRAY                ; set SI=offset address of ARRAY
-      POP BX
-     CALL PRINT_ARRAY             ; call the procedure PRINT_ARRAY
-      LEA DX, PROMPT_7            ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
-     MOV AH, 9                    ;AH value for dos interrupt output a message
-     INT 21H
+    @SKIP_SORTING:                ; SKIP_SORTING label    
+     @ENDSORT:                    ; ENDSORT label                                      
+      LEA DX, PROMPT_6            ; load and display the string PROMPT_6 
+      MOV AH, 9                   ;AH value for dos interrupt output a message
+      INT 21H           
+      LEA SI, ARRAY               ; set SI=offset address of ARRAY
+      POP BX                      ; pop a value from STACK into BX
+      CALL PRINT_ARRAY            ; call the procedure PRINT_ARRAY
+      LEA DX, PROMPT_7            ; load and display the string PROMPT_7 
+      MOV AH, 9                   ;AH value for dos interrupt output a message
+      INT 21H
       CALL PRINT_ARRAY_REVERSE  ; call the procedure PRINT_ARRAY_REVERSE
-     MOV AH, 4CH                  ; return control to DOS
-     INT 21H
-     MOV AH, 4CH                  ; return control to DOS
-     INT 21H
-     
-        RET 
+      MOV AH, 4CH                  ; return control to DOS
+      INT 21H
+      MOV AH, 4CH                  ; return control to DOS
+      INT 21H
+      RET 
   CONDITION ENDP
 ;-------------------------------------------------------------------------
  INDECIMAL PROC
