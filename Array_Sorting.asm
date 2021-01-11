@@ -7,12 +7,8 @@
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Quick:',0AH,0DH,'$'
     PROMPT_6  DW  ,0AH,0DH,'your sorted array is:$'
-    ARRAY DW 255 DUP(?)
-    
-    
-    
-    
-    
+     PROMPT_7  DW  ,0AH,0DH,'your sorted reverse array is:$'
+    ARRAY DW 255 DUP(?)    
  .CODE
    MAIN PROC
      MOV AX, @DATA                ; initialize DS
@@ -46,11 +42,6 @@
      
   
      ;CALL BUBBLE_SORT
-;-----------------------------------------------------------
-;-----------------------------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------------------------
-;---------------------------------------------------------------------------------------------------
-;----------------------------------------------------------------------------------------------------
 ;the array size element is stored in AL register at this point which is 8bit in size, for further edits 
 ;
 ;
@@ -354,7 +345,9 @@ pop bx
              LEA SI, ARRAY                ; set SI=offset address of ARRAY
       POP BX
      CALL PRINT_ARRAY             ; call the procedure PRINT_ARRAY
-
+      CALL PRINT_ARRAY_REVERSE  ; call the procedure PRINT_ARRAY_REVERSE
+     MOV AH, 4CH                  ; return control to DOS
+     INT 21H
      MOV AH, 4CH                  ; return control to DOS
      INT 21H
      
@@ -362,7 +355,6 @@ pop bx
         
   CONDITION ENDP
 ;-------------------------------------------------------------------------
-;------------------------------------------------------------------------
  INDECIMAL PROC
    ; this procedure will read a number in decimal form    
    ; input : none
@@ -477,10 +469,7 @@ pop bx
    POP BX                         ; pop a value from STACK into BX
    RET                            ; return control to the calling procedure
  INDECIMAL ENDP
- 
- ;**************************************************************************;
  ;-----------------------------  READ_ARRAY  -------------------------------;
- ;**************************************************************************;
  
  READ_ARRAY PROC
    ; this procedure will read the elements for an array
@@ -505,14 +494,6 @@ pop bx
    POP AX                         ; pop a value from STACK into AX
    RET                            ; return control to the calling procedure
    READ_ARRAY ENDP
-   
-   ;------------------------------------------------------------------------------
-   ;------------------------------------------------------------------------------
-   ;---------------------------------------------------------------------------------
-   ;---------------------------------------------------------------------------------
-   
-   
-   
     Array_SizeP PROC
         ; this procedure will read the array size from the user as a positive number between 0 and 255
     
@@ -626,12 +607,7 @@ pop bx
    POP BX                         ; pop a value from STACK into BX
    RET                            ; return control to the calling procedure 
    Array_SizeP ENDP   
-   
-   
-   
-    ;**************************************************************************;
  ;--------------------------------  OUTDEC  --------------------------------;
- ;**************************************************************************;
 OUTDEC PROC
    ; this procedure will display a decimal number
    ; input : AX
@@ -680,30 +656,20 @@ OUTDEC PROC
    POP BX                         ; pop a value from STACK into BX
 
    RET                            ; return control to the calling procedure
- OUTDEC ENDP
-
-
-   
-        
-        
+ OUTDEC ENDP                
  PRINT_ARRAY PROC
    ; this procedure will print the elements of a given array
    ; input : SI=offset address of the array
    ;       : BX=size of the array
    ; output : none
-
    PUSH AX                        ; push AX onto the STACK   
    PUSH CX                        ; push CX onto the STACK
    PUSH DX                        ; push DX onto the STACK
-
    MOV CX, BX                     ; set CX=BX
-
    @PRINT_ARRAY:                  ; loop label
      XOR AH, AH                   ; clear AH
      MOV AX, [SI]                 ; set AL=[SI]
-
      CALL OUTDEC                  ; call the procedure OUTDEC
-
      MOV AH, 2                    ; set output function
      MOV DL, 20H                  ; set DL=20H
      INT 21H                      ; print a character
@@ -718,5 +684,35 @@ OUTDEC PROC
 
    RET                            ; return control to the calling procedure
  PRINT_ARRAY ENDP
+  PRINT_ARRAY_REVERSE PROC
+    ; this procedure will print reverse the elements of a given array
+   ; input : SI=offset address of the array
+   ;       : BX=size of the array  
+   ; output : none 
+   PUSH AX                        ; push AX onto the STACK   
+   PUSH CX                        ; push CX onto the STACK
+   PUSH DX                        ; push DX onto the STACK 
+   LEA SI,ARRAY                    
+   MOV CX,BX                         ;CX=CX+BX
+   MOV DI,SI                        ;set DI=SI
+   SUB BX,1                         ;set bx=bx-1 
+   ADD BX,BX                        ;BX=BX*2
+   ADD SI,BX                        ; set CX=BX
+   @PRINT_ARRAY_REVERSE:           ; loop label
+     XOR AH, AH                   ; clear AH
+     MOV AX, [SI]                 ; set AL=[SI]
+     CALL OUTDEC                  ; call the procedure OUTDEC
+     MOV AH, 2                    ; set output function
+     MOV DL, 20H                  ; set DL=20H
+     INT 21H                      ; print a character
+     DEC SI                       ; set SI=SI-2
+    DEC SI  
+   LOOP @PRINT_ARRAY_REVERSE       ; jump to label @PRINT_ARRAY while CX!=0
+   POP DX                         ; pop a value from STACK into DX
+   POP CX                         ; pop a value from STACK into CX
+   POP AX                         ; pop a value from STACK into AX
+   RET                            ; return control to the calling procedure   
+  
+ PRINT_ARRAY_REVERSE ENDP
 
  END MAIN
