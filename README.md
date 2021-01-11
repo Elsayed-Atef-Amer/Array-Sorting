@@ -12,30 +12,30 @@
   These algorithms take an input list, process it (i.e. perform some operations on it) and produce the sorted list.
   Types of Sorting Algorithms:
       
-      1-Bubble Sort
-      2-Selection Sort
-      3-Merge Sort
-      4-Insertion Sort
-      5-Quick Sort
-      6-Heap Sort
-      7-Radix Sort
-      8-Bucket Sort
+      1-Bubble Sort.
+      2-Selection Sort.
+      3-Merge Sort.
+      4-Insertion Sort.
+      5-Quick Sort.
+      6-Heap Sort.
+      7-Radix Sort.
+      8-Bucket Sort.
   The complexity of sorting algorithm calculates the running time of a function in which 'N' number of items are to be sorted. The choice for which sorting method is suitable
   for a problem depends on several dependency configurations for different problems. The most noteworthy of these considerations are:
   
-      1-The length of time spent by the programmer in programming a specific sorting program
-      2-Amount of machine time necessary for running the program
-      3-The amount of memory necessary for running the program
+      1-The length of time spent by the programmer in programming a specific sorting program.
+      2-Amount of machine time necessary for running the program.
+      3-The amount of memory necessary for running the program.
       
    so, to get the amount of time required to sort an array of 'N' elements by a particular method, the normal approach is to analyze the method to find the number of comparisons
    (or exchanges) required by it. Most of the sorting techniques are data sensitive, and so the metrics for them depends on the order in which they appear in an input array.
       
    Various sorting techniques are analyzed in various cases and named these cases as follows:
 
-      Best case
-      Worst case
-      Average case
-  Hence, the result of these cases is often a formula giving the average time required for a particular sort of size 'N.' Most of the sort methods have time requirements that
+      Best case.
+      Worst case.
+      Average case.
+  Hence, the result of these cases is often a formula giving the average time required for a particular sort of size 'N.' Most of the sort methods have time requirements that.
   range from O(Nlog N) to O(N2).
  ![](https://i.stack.imgur.com/GylD4.jpg)
  
@@ -186,10 +186,14 @@ In every iteration of selection sort, the minimum element (considering ascending
     int length,choice;
     cout<<"Enter Array size :/n";
     cin >>length;
-    while (length<=0){
-    cout <<"'array size cant be but a POSITIVE Integer /n";
+    while (length<0){
+    cout <<"array size cant be but a POSITIVE Integer /n";
     cin >>length;
                      }
+    while (length==0){
+    cout <<"your Array has no elements,please enter POSITIVE integer:/n";
+    cin >>length;
+                     }                 
     int array[length];
     cout <<"The Array elements are : /n";
     for(int i=0;i<length;i++)
