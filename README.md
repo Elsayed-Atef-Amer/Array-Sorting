@@ -107,10 +107,10 @@ In every iteration of selection sort, the minimum element (considering ascending
 
 ![Output of selection sort example with array length of 6](Images/ex_selection.png)
 
-     3-Output of selection sort but with length negative then zero 
+     3-Output of selection sort but with length negative then zero and wrong input to choose sorting type
      
     
-  ![Output of selection sort but with length negative then zero ](Images/ex_fake.png)
+  ![Output of selection sort but with length negative then zero and wrong input to choose sorting type ](Images/exa_fake.png)
 
   
   
