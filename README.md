@@ -99,97 +99,101 @@ In every iteration of selection sort, the minimum element (considering ascending
 **C++ code :**
 
      
-     
-        //Swap function
+    #include <iostream>
+
+    using namespace std;
+
+
+    //Swap function
     void swap(int *xp, int *yp) 
     { 
     int temp = *xp; 
     *xp = *yp; 
     *yp = temp; 
     }
-    
-       // BUBBLE_SORT Function code 
-       
+
+    // BUBBLE_SORT Function code 
+   
     void BUBBLE_SORT(int arr[], int n)  
     {  
-    for (int i = 0; i < n-1; i++)      
-    
-    for (int j = 0; j < n-i-1; j++)                                 // "j < n-i-1" Because Last i elements are already in place  
-        if (arr[j] > arr[j+1])  
-            swap(&arr[j], &arr[j+1]);  
+      for (int i = 0; i < n-1; i++)      
+         for (int j = 0; j < n-i-1; j++)                                 // "j < n-i-1" Because Last i elements are already in place  
+            if (arr[j] > arr[j+1])  
+               swap(&arr[j], &arr[j+1]);  
     }  
-  
-      // QUICK_SORT Function code
-      
-    /* This function takes last element as pivot, places 
-    the pivot element at its correct position in sorted 
-    array, and places all smaller (smaller than pivot) 
-    to left of pivot and all greater elements to right 
-    of pivot */
-    
-    int partition (int arr[], int low, int high) 
-    { 
-    int pivot = arr[high];    // pivot 
-    int i = (low - 1);                                                // Index of smaller element 
-  
-    for (int j = low; j <= high- 1; j++) 
-    { 
+ 
+    // SELECTION_SORT Function code 
 
-        if (arr[j] <= pivot)                                          // If current element is smaller than or equal to pivot 
-        { 
-            i++;                                                      // increment index of smaller element 
-            swap(&arr[i], &arr[j]); 
-        } 
-    } 
-    swap(&arr[i + 1], &arr[high]); 
-    return (i + 1); 
-    } 
-  
-    /* The main function that implements QuickSort 
-    arr[] --> Array to be sorted, 
-    low  --> Starting index, 
-    high  --> Ending index */
-    
-    void QUICK_SORT(int arr[], int low, int high) 
-    { 
-    if (low < high) 
-    { 
-        int pi = partition(arr, low, high);                          //pi is partitioning index, arr[p] is now at right place 
-       QUICK_SORT(arr, low, pi - 1);                                 // Separately sort elements before partition...
-       QUICK_SORT(arr, pi + 1, high);                                //and after partition 
-    } 
 
-    
-    main(){
+    void Selection_Sort(int arr[], int n)  
+    {  
+         int i, j, min_idx;  
   
-      //define variables and take inputs from user code 
-      int length,choice;
-      int starting_index =0;
-      cout<<"please enter the length of array";
-      cin >>length;
-      int array[length];
-      cout <<"please enter elements of array";
-      for(int i=0;i<length;i++)
-      {
-      cin >> array[i];
-      }
-      cout <<"please enter 1 for Bubble sort OR 2 for Quick sort";
-      cin >> choice;
-      //condition code
-      if(choice == 1){
-      BUBBLE_SORT(array,length);
-      }
-      else if (choice == 2){ 
-      QUICK_SORT(array,starting_index,length-1);
-      }
-      else{
-          cout <<"Error invaild input";
-      }
-  
-  
-  
-      }
-  
-  
-  
+         // One by one move boundary of unsorted subarray  
+         for (i = 0; i < n-1; i++)  
+        {  
+     // Find the minimum element in unsorted array  
+           min_idx = i;  
+                 for (j = i+1; j < n; j++)  
+                    if (arr[j] < arr[min_idx])  
+                       min_idx = j;  
+           // Swap the found minimum element with the first element  
+          swap(&arr[min_idx], &arr[i]);  
+       }  
+    }   
+
+    void Print_Ascending_Array(int arr[], int size)  
+    {  
+    cout <<"your sorted array is:  ";
+
+    for (int i=0; i < size; i++)  
+        cout << arr[i] << "   ";  
+    cout << endl;  
+    }  
+
+    void Print_Descending_Array(int arr[], int size)  
+    {  
+    cout <<"your sorted reverse array is:  ";
+
+    for (int i=size-1; i >=0; i--)  
+        cout << arr[i] << "   ";  
+     cout << endl;  
+    }  
+
+
+
+    int main() 
+    {
+    int length,choice;
+    cout<<"Enter Array size : ";
+    cin >>length;
+    while (length<=0){
+    cout <<"array size can't be negative or zero, please enter a POSITIVE number ";
+    cin >>length;
+                     }
+    int array[length];
+    cout <<"The Array elements are : ";
+    for(int i=0;i<length;i++)
+    {
+    cin >> array[i];
+    }
+    cout <<"please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for SELECTION sort :  ";
+    cin >> choice;
+
+    while ((choice>2) || (choice<1)){
+      cout <<"you can only choose 1 for bubble or 2 for Selection ";
+    cin >>choice;
+                                    }
+    if(choice == 1){
+    BUBBLE_SORT(array,length);
+    Print_Ascending_Array(array, length);
+    Print_Descending_Array(array, length);
+                   }
+    else if (choice == 2){ 
+    Selection_Sort(array,length);
+    Print_Ascending_Array(array, length);
+    Print_Descending_Array(array, length);
+                         }
+    return 0;
+    }
 
