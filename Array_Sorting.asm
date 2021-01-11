@@ -7,8 +7,8 @@
     PROMPT_3  DW  ,0AH,0DH,'array size cant but a POSITIVE Integer, $'
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for SELECTION sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Selection:',0AH,0DH,'$'
-    PROMPT_6  DW  ,0AH,0DH,'your sorted array is:$'
-    PROMPT_7  DW  ,0AH,0DH,'your sorted reverse array is:$'
+    PROMPT_6  DW  ,0AH,0DH,'your sorted array in ascending order is:$'
+    PROMPT_7  DW  ,0AH,0DH,'your sorted array in descending order is:$'
     PROMPT_8  DW  ,0AH,0DH,'your Array has no elements,please enter POSITIVE integer:$'
     ARRAY DW 255 DUP(?)    
  
@@ -378,7 +378,8 @@
    POP AX                         ; pop a value from STACK into AX
    RET                            ; return control to the calling procedure
    READ_ARRAY ENDP
-    Array_SizeP PROC
+ ;----------------------------------Array_Size-------------------------------   
+ Array_SizeP PROC
         ; this procedure will read the array size from the user as a positive number between 0 and 255
     
    PUSH BX                        ; push BX onto the STACK
@@ -493,7 +494,7 @@
    Array_SizeP ENDP   
  ;--------------------------------  OUTDEC  --------------------------------;
 OUTDEC PROC
-   ; this procedure will display a decimal number
+   ; this procedure will display a signed decimal number
    ; input : AX
    ; output : none
 
@@ -541,8 +542,9 @@ OUTDEC PROC
 
    RET                            ; return control to the calling procedure
  OUTDEC ENDP                
+;----------------------------------PRINT_ARRAY------------------------------ 
  PRINT_ARRAY PROC
-   ; this procedure will print the elements of a given array
+   ; this procedure will print the elements of a given array to dos screen
    ; input : SI=offset address of the array
    ;       : BX=size of the array
    ; output : none
@@ -568,8 +570,9 @@ OUTDEC PROC
 
    RET                            ; return control to the calling procedure
  PRINT_ARRAY ENDP
-  PRINT_ARRAY_REVERSE PROC
-    ; this procedure will print reverse the elements of a given array
+;---------------------------------PRINT_ARRAY_REVERSED---------------------  
+PRINT_ARRAY_REVERSE PROC
+    ; this procedure will print reverse the elements of a given array(Descending order)
    ; input : SI=offset address of the array
    ;       : BX=size of the array  
    ; output : none 
