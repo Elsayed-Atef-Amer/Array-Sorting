@@ -57,12 +57,10 @@
 
 ;-------------------CONDITION function-----------------------------------
    CONDITION PROC 
-    push bx
+    push bx                       ; push BX onto the STACK
    
     @READ0:
-                     ; push BX onto the STACK  
-        
-        
+ 
      XOR CX,CX                    ; make CX register equals to zero, CX==0
      XOR BX,BX                    ; make BX register equals to zero, BX==0
      XOR AX,AX                    ; make AX register equals to zero, AX==0
