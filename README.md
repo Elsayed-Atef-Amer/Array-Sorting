@@ -163,7 +163,7 @@ In every iteration of selection sort, the minimum element (considering ascending
 
     void Print_Ascending_Array(int arr[], int size)  
     {  
-    cout <<"your sorted array in ascending order is:  ";
+    cout <<"your sorted array in ascending order is: ";
 
     for (int i=0; i < size; i++)  
         cout << arr[i] << "   ";  
@@ -171,8 +171,8 @@ In every iteration of selection sort, the minimum element (considering ascending
     }  
 
     void Print_Descending_Array(int arr[], int size)  
-    {  
-    cout <<"your sorted array in descending order is:  ";
+    { 
+    cout <<"your sorted array in descending order is:";
 
     for (int i=size-1; i >=0; i--)  
         cout << arr[i] << "   ";  
@@ -184,23 +184,23 @@ In every iteration of selection sort, the minimum element (considering ascending
     int main() 
     {
     int length,choice;
-    cout<<"Enter Array size : ";
+    cout<<"Enter Array size :/n";
     cin >>length;
     while (length<=0){
-    cout <<"array size can't be negative or zero, please enter a POSITIVE number ";
+    cout <<"'array size cant be but a POSITIVE Integer /n";
     cin >>length;
                      }
     int array[length];
-    cout <<"The Array elements are : ";
+    cout <<"The Array elements are : /n";
     for(int i=0;i<length;i++)
     {
     cin >> array[i];
     }
-    cout <<"please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for SELECTION sort :  ";
+    cout <<"please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for SELECTION sort) :/n";
     cin >> choice;
 
     while ((choice>2) || (choice<1)){
-      cout <<"you can only choose 1 for bubble or 2 for Selection ";
+      cout <<"you can only choose 1 for bubble or 2 for Selection: /n";
     cin >>choice;
                                     }
     if(choice == 1){
