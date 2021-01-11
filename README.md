@@ -94,7 +94,24 @@ In every iteration of selection sort, the minimum element (considering ascending
  
 ![Selection-Sort-example](Images/selection_sort.gif)
 
+**OUTPUTS**
 
+     1- Output of bubble sort example with array length of 15
+  
+  ![Output of bubble sort example with array length of 15](Images/bubble_size_15.png)
+  
+  
+     2-Output of selection sort example with array length of 6
+
+![Output of selection sort example with array length of 6](Images/ex_selection.png)
+
+     3-Output of bubble sort but with length negative then zero 
+     
+    
+  ![Output of bubble sort but with length negative then zero ](Images/ex_fake.png)
+
+  
+  
   
 **C++ code :**
 
@@ -144,7 +161,7 @@ In every iteration of selection sort, the minimum element (considering ascending
 
     void Print_Ascending_Array(int arr[], int size)  
     {  
-    cout <<"your sorted array is:  ";
+    cout <<"your sorted array in ascending order is:  ";
 
     for (int i=0; i < size; i++)  
         cout << arr[i] << "   ";  
@@ -153,7 +170,7 @@ In every iteration of selection sort, the minimum element (considering ascending
 
     void Print_Descending_Array(int arr[], int size)  
     {  
-    cout <<"your sorted reverse array is:  ";
+    cout <<"your sorted array in descending order is:  ";
 
     for (int i=size-1; i >=0; i--)  
         cout << arr[i] << "   ";  
