@@ -52,16 +52,18 @@
       
     
 **Content of data segment:**
-  1. Array with length of 100.
-  2. Two variables one for array size and the other for making choice.
+
+    1. Array with length of 100.
+    2. Two variables one for array size and the other for making choice.
     
 **Steps of  coding :**
-  1. Taking the first input 'ARRAY_size' from the user.
-  2. Making a function to convert the input from ASKI to its decimal value, that is called 'INDECIMAL', we will call this function for every input we would take from user.
-  3. Taking the second input 'ARRAY' element by element from the user using 'READ_ARRAY' function in our code.
-  4. Condition code.
-  6. Bubble sort code.
-  7. Selection sort code.
+
+    1. Taking the first input 'ARRAY_size' from the user.
+    2. Making a function to convert the input from ASKI to its decimal value, that is called 'INDECIMAL', we will call this function for every input we would take from user.
+    3. Taking the second input 'ARRAY' element by element from the user using 'READ_ARRAY' function in our code.
+    4. Condition code.
+    6. Bubble sort code.
+    7. Selection sort code.
   
 **Bubble Sort Algorithm**
 
@@ -85,8 +87,8 @@
 
 The selection sort algorithm sorts an array by repeatedly finding the minimum element (considering ascending order) from unsorted part and putting it at the beginning. The algorithm maintains two subarrays in a given array.
 
-1) The subarray which is already sorted.
-2) Remaining subarray which is unsorted.
+    1- The subarray which is already sorted.
+    2- Remaining subarray which is unsorted.
 
 In every iteration of selection sort, the minimum element (considering ascending order) from the unsorted subarray is picked and moved to the sorted subarray.
  
@@ -105,10 +107,10 @@ In every iteration of selection sort, the minimum element (considering ascending
 
 ![Output of selection sort example with array length of 6](Images/ex_selection.png)
 
-     3-Output of bubble sort but with length negative then zero 
+     3-Output of selection sort but with length negative then zero 
      
     
-  ![Output of bubble sort but with length negative then zero ](Images/ex_fake.png)
+  ![Output of selection sort but with length negative then zero ](Images/ex_fake.png)
 
   
   
