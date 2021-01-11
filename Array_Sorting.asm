@@ -4,7 +4,7 @@
  
     PROMPT_1  DW  'Enter Array size :$'
     PROMPT_2  DW  ,0AH,0DH,'The Array elements are :$'  
-    PROMPT_3  DW  ,0AH,0DH,'array size cant but a POSITIVE Integer, $'
+    PROMPT_3  DW  ,0AH,0DH,'array size cant be but a POSITIVE Integer, $'
     PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for SELECTION sort) :$'  
     PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Selection:',0AH,0DH,'$'
     PROMPT_6  DW  ,0AH,0DH,'your sorted array in ascending order is:$'
@@ -57,13 +57,12 @@
 
 ;-------------------CONDITION function-----------------------------------
    CONDITION PROC 
+    push bx
    
     @READ0:
-     PUSH CX                      ; push CX onto the STACK  
-     PUSH AX                      ; push AX onto the STACK  
-     PUSH DX                      ; push DX onto the STACK  
-     PUSH BX                      ; push BX onto the STACK  
-    
+                     ; push BX onto the STACK  
+        
+        
      XOR CX,CX                    ; make CX register equals to zero, CX==0
      XOR BX,BX                    ; make BX register equals to zero, BX==0
      XOR AX,AX                    ; make AX register equals to zero, AX==0
