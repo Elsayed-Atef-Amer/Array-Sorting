@@ -4,8 +4,8 @@
     PROMPT_1  DW  'Enter Array size :$'
     PROMPT_2  DW  ,0AH,0DH,'The Array elements are :$'  
     PROMPT_3  DW  'array size cant be negative, please enter a POSITIVE number ',0AH,0DH,'$'
-    PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for Quick sort) :$'  
-    PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Quick:',0AH,0DH,'$'
+    PROMPT_4  DW  'please,choose Array type for sort (enter 1 for Bubble sort) OR (enter 2 for SELECTION sort) :$'  
+    PROMPT_5  DW  'you can only choose 1 for bubble or 2 for Selection:',0AH,0DH,'$'
     PROMPT_6  DW  ,0AH,0DH,'your sorted array is:$'
      PROMPT_7  DW  ,0AH,0DH,'your sorted reverse array is:$'
     ARRAY DW 255 DUP(?)    
@@ -345,6 +345,9 @@ pop bx
              LEA SI, ARRAY                ; set SI=offset address of ARRAY
       POP BX
      CALL PRINT_ARRAY             ; call the procedure PRINT_ARRAY
+      LEA DX, PROMPT_7            ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
+     MOV AH, 9                    ;AH value for dos interrupt output a message
+     INT 21H
       CALL PRINT_ARRAY_REVERSE  ; call the procedure PRINT_ARRAY_REVERSE
      MOV AH, 4CH                  ; return control to DOS
      INT 21H
