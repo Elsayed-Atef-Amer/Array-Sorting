@@ -19,8 +19,8 @@
      MOV AX, @DATA                ; initialize data segment ds
      MOV DS, AX
      LEA DX, PROMPT_1             ; load and display the string PROMPT_1,  user interface(UI) , to take the first array size from user.
-     MOV AH, 9                    ;AH value for dos interrupt output a message
-     INT 21H                      ;interrupt dos that takes input from user
+     MOV AH, 9                    ; AH value for dos interrupt output a message
+     INT 21H                      ; interrupt dos that takes input from user
     
      LEA SI, ARRAY                ; set SI=offset address of ARRAY
     
@@ -32,14 +32,14 @@
      je @No_Elements1             ; JUMP to No_Elements1 lable if the input equals(0)
      
      LEA DX, PROMPT_2             ; load and display the string PROMPT_2, user interface(UI), to take the farray elements from user.
-     MOV AH, 9                    ;AH value for dos interrupt output a message
-     INT 21H                      ;interrupt dos that takes input from user
+     MOV AH, 9                    ; AH value for dos interrupt output a message
+     INT 21H                      ; interrupt dos that takes input from user
      
      CALL READ_ARRAY              ; call the procedure READ_ARRAY
      
      LEA DX, PROMPT_4             ; load and display the string PROMPT_4 to get the value of the condition variable (1,2).
-     MOV AH, 9                    ;AH value for dos interrupt output a message
-     INT 21H                      ; interrupt
+     MOV AH, 9                    ; AH value for dos interrupt output a message
+     INT 21H                      ; interrupt dos that takes input from user
     
      LEA SI,ARRAY                 ; load array offset to SI
      CALL CONDITION               ; call condition function to make a decision of sort type to use 
@@ -51,7 +51,7 @@
      jmp @No_Elements             ; jump No_Elements label 
      
      MOV AH, 4CH                  ;AH Value for dos interrupt exit program
-     INT 21H                      ;interrupt dos that takes input from user              
+     INT 21H                      ;interrupt dos             
  
   MAIN ENDP
 
